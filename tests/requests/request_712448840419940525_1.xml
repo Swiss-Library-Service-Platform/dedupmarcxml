@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+  <version>1.2</version>
+  <numberOfRecords>1</numberOfRecords>
+  <records>
+    <record>
+      <recordSchema>marcxml</recordSchema>
+      <recordPacking>xml</recordPacking>
+      <recordData>
+        <record xmlns="http://www.loc.gov/MARC21/slim">
+          <leader>02239ngm a22004693a 4500</leader>
+          <controlfield tag="001">991170632470305501</controlfield>
+          <controlfield tag="006">m|||||o||c||||||||</controlfield>
+          <controlfield tag="007">cr |za|||||||a</controlfield>
+          <controlfield tag="007">vz||zazu|</controlfield>
+          <controlfield tag="008">140221s1988    gw 051 g      o   vleng d</controlfield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(VaAlASP)2091327</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(CKB)4940000000184555</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(OCoLC)877884023</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(EXLCZ)994940000000184555</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="040">
+            <subfield code="a">VaAlASP</subfield>
+            <subfield code="c">VaAlASP</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="0" tag="245">
+            <subfield code="a">Horowitz plays Mozart  /</subfield>
+            <subfield code="c">Peter Gelb production ; a Maysles film.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="260">
+            <subfield code="a">Berlin, Germany :</subfield>
+            <subfield code="b">C Major Entertainment,</subfield>
+            <subfield code="c">1988.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="300">
+            <subfield code="a">1 online resource (51 min.)</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="306">
+            <subfield code="a">005011</subfield>
+          </datafield>
+          <datafield ind1="0" ind2=" " tag="490">
+            <subfield code="a">Academic Video Online</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="530">
+            <subfield code="a">Previously released as DVD.</subfield>
+          </datafield>
+          <datafield ind1="0" ind2=" " tag="511">
+            <subfield code="a">Vladimir Horowitz, piano ; with Orchestra del Teatro alla Scala, Carlo Maria Giulini, conductor.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="546">
+            <subfield code="a">Spoken portions in English.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="518">
+            <subfield code="a">Filmed March 1987 at Abanella Studios, Milan.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="500">
+            <subfield code="a">Title from resource description page (viewed Feb. 21, 2014).</subfield>
+          </datafield>
+          <datafield ind1="0" ind2=" " tag="505">
+            <subfield code="a">Piano concerto no. 23 in A major, K. 488 / Wolfgang Amadeus Mozart.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="520">
+            <subfield code="a">Legendary pianist Vladimir Horowitz, conductor Carlo Maria Giulini and The Orchestra of La Scala perform Mozart's Piano Concerto No. 23 in A Major in a studio setting. The film also includes discussions, playback sessions and interviews. Nominated for Grammy Award in the Category 'Outstanding Classical Program in the Performing Arts': Peter Gelb (executive producer/producer), Susan Fromke (producer).</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="0" tag="650">
+            <subfield code="a">Concertos (Piano)</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="0" tag="650">
+            <subfield code="a">Piano music.</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="0" tag="600">
+            <subfield code="a">Horowitz, Vladimir,</subfield>
+            <subfield code="d">1903-1989.</subfield>
+          </datafield>
+          <datafield ind1="0" ind2=" " tag="773">
+            <subfield code="t">Horowitz plays Mozart</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Gelb, Peter.</subfield>
+            <subfield code="4">pro</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Giulini, Carlo Maria.</subfield>
+            <subfield code="4">cnd</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Horowitz, Vladimir,</subfield>
+            <subfield code="d">1903-1989.</subfield>
+            <subfield code="4">prf</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Mozart, Wolfgang Amadeus,</subfield>
+            <subfield code="d">1756-1791.</subfield>
+            <subfield code="t">Concertos,</subfield>
+            <subfield code="m">piano, orchestra,</subfield>
+            <subfield code="n">K. 488,</subfield>
+            <subfield code="r">A major.</subfield>
+          </datafield>
+          <datafield ind1="2" ind2=" " tag="710">
+            <subfield code="a">Teatro alla Scala.</subfield>
+            <subfield code="b">Orchestra.</subfield>
+            <subfield code="4">prf</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_UBS</subfield>
+            <subfield code="6">9972586303305504</subfield>
+            <subfield code="9">E</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_UZB</subfield>
+            <subfield code="6">99116937952105508</subfield>
+            <subfield code="9">E</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_ZHK</subfield>
+            <subfield code="6">99116921064505512</subfield>
+            <subfield code="9">E</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="906">
+            <subfield code="a">VIDEO</subfield>
+          </datafield>
+        </record>
+      </recordData>
+      <recordIdentifier>991170632470305501</recordIdentifier>
+      <recordPosition>1</recordPosition>
+    </record>
+  </records>
+  <extraResponseData xmlns:xb="http://www.exlibris.com/repository/search/xmlbeans/">
+    <xb:exact>true</xb:exact>
+    <xb:responseDate>2025-01-30T22:43:37+0100</xb:responseDate>
+  </extraResponseData>
+</searchRetrieveResponse>

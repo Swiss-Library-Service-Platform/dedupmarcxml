@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+  <version>1.2</version>
+  <numberOfRecords>1</numberOfRecords>
+  <records>
+    <record>
+      <recordSchema>marcxml</recordSchema>
+      <recordPacking>xml</recordPacking>
+      <recordData>
+        <record xmlns="http://www.loc.gov/MARC21/slim">
+          <leader>01367nam a2200325uca4500</leader>
+          <controlfield tag="001">991019884739705501</controlfield>
+          <controlfield tag="005">20241225150405.0</controlfield>
+          <controlfield tag="008">910712m19349999fr            00| i lat|d</controlfield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(swissbib)014134047-41slsp_network</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">014134047</subfield>
+            <subfield code="9">ExL</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(IDSLU)000376220ILU01</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="040">
+            <subfield code="a">ZBZ</subfield>
+            <subfield code="e">kids</subfield>
+            <subfield code="d">CH-ZuSLS</subfield>
+          </datafield>
+          <datafield ind1="0" ind2=" " tag="041">
+            <subfield code="a">lat</subfield>
+            <subfield code="a">fre</subfield>
+            <subfield code="a">lat</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="072">
+            <subfield code="a">597</subfield>
+            <subfield code="2">IDS LU</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="100">
+            <subfield code="a">Cicero, Marcus Tullius</subfield>
+            <subfield code="d">v106-v43</subfield>
+            <subfield code="0">(DE-588)118520814</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="0" tag="245">
+            <subfield code="a">Correspondance</subfield>
+            <subfield code="c">Cicéron ; texte établi et trad. par L.-A. Constans</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="250">
+            <subfield code="a">[Verschiedene Auflagen]</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="1" tag="264">
+            <subfield code="a">Paris</subfield>
+            <subfield code="b">Les Belles Lettres</subfield>
+            <subfield code="c">1934-</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="300">
+            <subfield code="a">3 Bände</subfield>
+            <subfield code="c">20 cm</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="336">
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="337">
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="338">
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+          </datafield>
+          <datafield ind1="0" ind2=" " tag="490">
+            <subfield code="a">Collection des Universités de France</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="500">
+            <subfield code="a">Briefe lat. mit franz. Übers., parallel angeordnet ; Einf. und Anm. franz. ; teilw. parallele Seitenzählung</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="7" tag="600">
+            <subfield code="a">Cicero, Marcus Tullius</subfield>
+            <subfield code="d">v106-v43</subfield>
+            <subfield code="0">(DE-588)118520814</subfield>
+            <subfield code="2">gnd</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="655">
+            <subfield code="a">Briefsammlung</subfield>
+            <subfield code="2">gnd-content</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Constans, Léopold Albert</subfield>
+            <subfield code="d">1891-1936</subfield>
+            <subfield code="0">(DE-588)124913962</subfield>
+          </datafield>
+          <datafield ind1="4" ind2=" " tag="856">
+            <subfield code="3">Inhaltsverzeichnis</subfield>
+            <subfield code="u">https://www.ub.unibas.ch/tox/IDSLUZ/000376220/PDF</subfield>
+            <subfield code="q">pdf</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_RZS</subfield>
+            <subfield code="6">993762200105505</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="911">
+            <subfield code="a">Cicero, Marcus Tullius</subfield>
+            <subfield code="c">Schriftsteller, Staatsmann, Anwalt, Römisches Reich</subfield>
+            <subfield code="d">106-43 v.Chr</subfield>
+            <subfield code="5">IDSLU/ger</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="949">
+            <subfield code="a">https://www.ub.unibas.ch/tox/IDSLUZ/000376220/PDF</subfield>
+          </datafield>
+        </record>
+      </recordData>
+      <recordIdentifier>991019884739705501</recordIdentifier>
+      <recordPosition>1</recordPosition>
+    </record>
+  </records>
+  <extraResponseData xmlns:xb="http://www.exlibris.com/repository/search/xmlbeans/">
+    <xb:exact>true</xb:exact>
+    <xb:responseDate>2025-01-30T22:59:10+0100</xb:responseDate>
+  </extraResponseData>
+</searchRetrieveResponse>

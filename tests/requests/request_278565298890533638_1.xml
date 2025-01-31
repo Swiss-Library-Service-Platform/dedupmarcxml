@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+  <version>1.2</version>
+  <numberOfRecords>1</numberOfRecords>
+  <records>
+    <record>
+      <recordSchema>marcxml</recordSchema>
+      <recordPacking>xml</recordPacking>
+      <recordData>
+        <record xmlns="http://www.loc.gov/MARC21/slim">
+          <leader>01061nam a22002412ca4500</leader>
+          <controlfield tag="001">991068988579705501</controlfield>
+          <controlfield tag="005">20240927192604.0</controlfield>
+          <controlfield tag="008">030930s1935    gw            01| | ger^^</controlfield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(swissbib)042907470-41slsp_network</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">042907470</subfield>
+            <subfield code="9">ExL</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(IDSBB)002979101DSV01</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="040">
+            <subfield code="a">SzZuIDS BS/BE A100</subfield>
+            <subfield code="e">kids</subfield>
+            <subfield code="d">CH-ZuSLS</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="0" tag="245">
+            <subfield code="a">Aus der Geisteswelt des Mittelalters</subfield>
+            <subfield code="b">Studien und Texte Martin Grabmann zur Vollendung des 60. Lebensjahres von Freunden und Schülern gewidmet</subfield>
+            <subfield code="c">Hg. von Albert Lang, Joseph Lechner, Michael Schmaus</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="1" tag="264">
+            <subfield code="a">Münster</subfield>
+            <subfield code="b">Aschendorff</subfield>
+            <subfield code="c">1935</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="300">
+            <subfield code="a">Halbbd. 1.2</subfield>
+            <subfield code="b">Mit Portr., Taf.</subfield>
+            <subfield code="c">8'</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="336">
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="337">
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="338">
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="490">
+            <subfield code="a">Beiträge zur Geschichte der Philosophie und Theologie des Mittelalters. Supplementband</subfield>
+            <subfield code="v">3</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="655">
+            <subfield code="a">Festschrift</subfield>
+            <subfield code="2">gnd-content</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Grabmann, Martin</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Lang, Albert</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="830">
+            <subfield code="a">Beiträge zur Geschichte der Philosophie und Theologie des Mittelalters</subfield>
+            <subfield code="p">Supplementband</subfield>
+            <subfield code="v">3</subfield>
+            <subfield code="w">(IDSBB)000815847DSV01</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_UBS</subfield>
+            <subfield code="6">9929791010105504</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_UBE</subfield>
+            <subfield code="6">99116703221505511</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+        </record>
+      </recordData>
+      <recordIdentifier>991068988579705501</recordIdentifier>
+      <recordPosition>1</recordPosition>
+    </record>
+  </records>
+  <extraResponseData xmlns:xb="http://www.exlibris.com/repository/search/xmlbeans/">
+    <xb:exact>true</xb:exact>
+    <xb:responseDate>2025-01-30T16:20:14+0100</xb:responseDate>
+  </extraResponseData>
+</searchRetrieveResponse>

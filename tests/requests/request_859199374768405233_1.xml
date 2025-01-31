@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+  <version>1.2</version>
+  <numberOfRecords>1</numberOfRecords>
+  <records>
+    <record>
+      <recordSchema>marcxml</recordSchema>
+      <recordPacking>xml</recordPacking>
+      <recordData>
+        <record xmlns="http://www.loc.gov/MARC21/slim">
+          <leader>01986nam a2200373 c 4500</leader>
+          <controlfield tag="001">991171854084705501</controlfield>
+          <controlfield tag="005">20240417162732.0</controlfield>
+          <controlfield tag="008">240227t20202020fr aaaaff     000 | fre d</controlfield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">9782911782954</subfield>
+            <subfield code="q">leporello</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="040">
+            <subfield code="a">CH-ZuSLS HESSO headge</subfield>
+            <subfield code="b">fre</subfield>
+            <subfield code="e">rda</subfield>
+          </datafield>
+          <datafield ind1="7" ind2="4" tag="082">
+            <subfield code="a">740</subfield>
+            <subfield code="2">23sdnb</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="100">
+            <subfield code="a">Colin, Myriam</subfield>
+            <subfield code="0">(IDREF)163823308</subfield>
+            <subfield code="4">art</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="0" tag="245">
+            <subfield code="a">&lt;&lt;Le&gt;&gt; petit chaperon rouge</subfield>
+            <subfield code="c">adaptation tactile Myriam Colin ; d'après l'oeuvre de Warja Lavater ; d'après un conte de Perrault</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="1" tag="264">
+            <subfield code="a">Talant</subfield>
+            <subfield code="b">Les Doigts Qui Rêvent</subfield>
+            <subfield code="c">[2020]</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="4" tag="264">
+            <subfield code="c">© 2020</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="300">
+            <subfield code="a">1 leporello</subfield>
+            <subfield code="b">noir et blanc, couleur (illustrations tactiles)</subfield>
+            <subfield code="c">12 cm</subfield>
+            <subfield code="e">1 coffret</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="336">
+            <subfield code="b">sti</subfield>
+            <subfield code="2">rdacontent</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="336">
+            <subfield code="b">tci</subfield>
+            <subfield code="2">rdacontent</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="336">
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="337">
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="338">
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="520">
+            <subfield code="a">Voici la merveilleuse interprétation de ce conte, par la très grande Warja Lavater, lisible du bout des doigts au plat de la main, mais aussi avec les yeux et tout en délicatesse et poésie. Un petit rond rouge pour le Petit Chaperon Rouge, un gros rond noir pour le loup, la forêt en gaufrage… Livre sans texte (hormis la page de légende et la couverture imprimées en noir et en braille)</subfield>
+            <subfield code="c">site de l'éditeur</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="7" tag="600">
+            <subfield code="a">Lavater, Warja</subfield>
+            <subfield code="d">1913-2007</subfield>
+            <subfield code="0">(IDREF)032648731</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="7" tag="600">
+            <subfield code="a">Perrault, Charles</subfield>
+            <subfield code="d">1628-1703</subfield>
+            <subfield code="t">&lt;&lt;Le &gt;&gt;Petit Chaperon rouge</subfield>
+            <subfield code="0">(IDREF)028088751</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">Femmes artistes</subfield>
+            <subfield code="0">(IDREF)027276600</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">Contes</subfield>
+            <subfield code="0">(IDREF)027286460</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">Braille</subfield>
+            <subfield code="0">(IDREF)127595414</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="651">
+            <subfield code="a">Suisse</subfield>
+            <subfield code="0">(IDREF)027249654</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="655">
+            <subfield code="a">Livres d'artistes</subfield>
+            <subfield code="0">(IDREF)027461513</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="655">
+            <subfield code="a">Ouvrages pour la jeunesse</subfield>
+            <subfield code="0">(IDREF)028626931</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="655">
+            <subfield code="a">Livres en braille</subfield>
+            <subfield code="0">(IDREF)033713960</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="655">
+            <subfield code="a">Ouvrages illustrés</subfield>
+            <subfield code="0">(IDREF)027791491</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Lavater, Warja</subfield>
+            <subfield code="d">1913-2007</subfield>
+            <subfield code="0">(IDREF)032648731</subfield>
+            <subfield code="4">art</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Perrault, Charles</subfield>
+            <subfield code="d">1628-1703</subfield>
+            <subfield code="t">&lt;&lt;Le &gt;&gt;Petit Chaperon rouge</subfield>
+            <subfield code="0">(IDREF)028088751</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_HES</subfield>
+            <subfield code="6">991002602229705514</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+        </record>
+      </recordData>
+      <recordIdentifier>991171854084705501</recordIdentifier>
+      <recordPosition>1</recordPosition>
+    </record>
+  </records>
+  <extraResponseData xmlns:xb="http://www.exlibris.com/repository/search/xmlbeans/">
+    <xb:exact>true</xb:exact>
+    <xb:responseDate>2025-01-30T22:04:16+0100</xb:responseDate>
+  </extraResponseData>
+</searchRetrieveResponse>

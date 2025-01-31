@@ -1,0 +1,4 @@
+levenshtein
+numpy
+lxml
+almasru
