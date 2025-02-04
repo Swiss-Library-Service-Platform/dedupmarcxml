@@ -85,7 +85,7 @@ class BriefRecFactory:
         return title
 
     @staticmethod
-    def normalize_extent(extent: str) -> Dict:
+    def normalize_extent(extent: str) -> Optional[Dict]:
         """Normalize extent string and return a dictionary with numbers
 
         :param extent: extent to normalize
@@ -96,6 +96,7 @@ class BriefRecFactory:
         extent_list = [int(f) for f in re.findall(r'\d+', extent_lower)]
         extent_list += [tools.roman_to_int(f) for f in re.findall(r'\b[ivxlcdm]+\b', extent_lower)
                         if tools.roman_to_int(f) is not None]
+
         return {'nb': sorted(extent_list, reverse=True), 'txt': extent}
 
     @staticmethod
@@ -193,7 +194,7 @@ class BriefRecFactory:
         if len(isbns) == 0 and len(issns) == 0 and len(std_nums) == 0 and pub_nums == 0:
             return None
 
-        return list(isbns) + list(issns) + list(std_nums) + list(pub_nums)
+        return list(set.union(isbns, issns, std_nums, pub_nums))
 
     @staticmethod
     def get_leader_pos67(bib: etree.Element) -> Optional[str]:
@@ -212,7 +213,7 @@ class BriefRecFactory:
             return leader.text[6:8]
 
     @staticmethod
-    def get_sysnums(bib: etree.Element) -> Optional[List[str]]:
+    def get_sys_nums(bib: etree.Element) -> Optional[List[str]]:
         """get_sysnums(bib: etree.Element) -> Optional[List[str]]
         Get a set of system numbers
 
@@ -221,11 +222,11 @@ class BriefRecFactory:
         :return: set of system numbers
         """
         fields = bib.findall('.//datafield[@tag="035"]/subfield[@code="a"]')
-        sysnums = set([field.text for field in fields])
-        if len(sysnums) == 0:
+        sys_nums = set([field.text for field in fields])
+        if len(sys_nums) == 0:
             return None
 
-        return list(sysnums)
+        return list(sys_nums)
 
     @staticmethod
     def get_title(bib: etree.Element) -> Optional[str]:
@@ -312,7 +313,7 @@ class BriefRecFactory:
         return titles if len(titles) > 0 else None
 
     @staticmethod
-    def get_year(bib: etree.Element) -> Optional[Dict]:
+    def get_years(bib: etree.Element) -> Optional[Dict]:
         """Get the dates of publication from 008 and 264$$c fields
 
         This function retrieves the publication years from the 008 control
@@ -568,13 +569,14 @@ class BriefRecFactory:
         if controlfield008 is None:
             return None
 
-        languages = set()
-        languages.add(controlfield008.text[35:38])
+        languages = []
+        languages.append(controlfield008.text[35:38])
 
         for field041 in bib.findall('.//datafield[@tag="041"]/subfield[@code="a"]'):
-            languages.add(field041.text)
+            if field041.text not in languages:
+                languages.append(field041.text)
 
-        return list(languages)
+        return languages
 
     @staticmethod
     def get_editions(bib: etree.Element) -> Optional[List[Dict]]:
@@ -762,13 +764,13 @@ class BriefRecFactory:
                     'short_title': BriefRecFactory.get_title(bib),
                     'creators': BriefRecFactory.get_creators(bib),
                     'corp_creators': BriefRecFactory.get_corp_creators(bib),
-                    'language': BriefRecFactory.get_languages(bib),
+                    'languages': BriefRecFactory.get_languages(bib),
                     'extent': BriefRecFactory.get_extent(bib),
                     'editions': BriefRecFactory.get_editions(bib),
-                    'year': BriefRecFactory.get_year(bib),
+                    'years': BriefRecFactory.get_years(bib),
                     'publishers': BriefRecFactory.get_publishers(bib),
                     'series': BriefRecFactory.get_series(bib),
                     'parent': BriefRecFactory.get_parent(bib),
                     'std_nums': BriefRecFactory.get_std_num(bib),
-                    'sysnums': BriefRecFactory.get_sysnums(bib)}
+                    'sys_nums': BriefRecFactory.get_sys_nums(bib)}
         return bib_info

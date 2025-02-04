@@ -24,7 +24,7 @@ class TestSruClient(unittest.TestCase):
 
         self.assertEqual(rec.data['format']['type'], 'Book')
         self.assertEqual(rec.data['format']['access'], 'Braille')
-        self.assertEqual(rec.data['year']['y2'], 2020)
+        self.assertEqual(rec.data['years']['y2'], 2020)
 
     def test_create_brief_record_3(self):
         mms_id = '991039410659705501'  # Score physical
@@ -33,7 +33,7 @@ class TestSruClient(unittest.TestCase):
 
         self.assertEqual(rec.data['extent']['nb'], [86, 1])
         self.assertEqual(rec.data['format']['type'], 'Notated Music')
-        self.assertEqual(rec.data['year']['y1'][0], 1926)
+        self.assertEqual(rec.data['years']['y1'][0], 1926)
         self.assertTrue('H 29,265' in rec.data['std_nums'])
 
     def test_create_brief_record_4(self):
@@ -54,13 +54,13 @@ class TestSruClient(unittest.TestCase):
         self.assertEqual(rec.data['format']['type'], 'Video')
         self.assertEqual(rec.data['format']['access'], 'Online')
         self.assertEqual(rec.data['extent']['nb'], [51, 1])
-        self.assertEqual(rec.data['language'], ['eng'])
+        self.assertEqual(rec.data['languages'], ['eng'])
 
     def test_create_brief_record_6(self):
         mms_id = '991019884739705501' # multi lingual book
         rec = SruRecord(mms_id)
         rec = BriefRec(rec.data)
-        self.assertEqual(set(rec.data['language']), {'lat', 'fre'})
+        self.assertEqual(set(rec.data['languages']), {'lat', 'fre'})
         self.assertTrue('Collection des Universités de France' in rec.data['series'])
 
     def test_create_brief_record_7(self):

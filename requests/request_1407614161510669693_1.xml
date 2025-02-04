@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+  <version>1.2</version>
+  <numberOfRecords>1</numberOfRecords>
+  <records>
+    <record>
+      <recordSchema>marcxml</recordSchema>
+      <recordPacking>xml</recordPacking>
+      <recordData>
+        <record xmlns="http://www.loc.gov/MARC21/slim">
+          <leader>02641nam a2200493 c 4500</leader>
+          <controlfield tag="001">991171135704605501</controlfield>
+          <controlfield tag="005">20230614155851.0</controlfield>
+          <controlfield tag="007">tu</controlfield>
+          <controlfield tag="008">211003s2021    be ||||| |||| 00||||ger^^</controlfield>
+          <datafield ind1=" " ind2=" " tag="015">
+            <subfield code="a">23,A03</subfield>
+            <subfield code="z">21,N40</subfield>
+            <subfield code="2">dnb</subfield>
+          </datafield>
+          <datafield ind1="7" ind2=" " tag="016">
+            <subfield code="2">DE-101</subfield>
+            <subfield code="a">124239060X</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">9782875743732</subfield>
+            <subfield code="q">Broschur</subfield>
+            <subfield code="c">EUR 71.95 (DE), EUR 73.70 (AT), CHF 83.00 (freier Preis)</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">2875743732</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(DE-101)124239060X</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(DE-599)DNB124239060X</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="040">
+            <subfield code="a">DE-101</subfield>
+            <subfield code="b">ger</subfield>
+            <subfield code="c">DE-101</subfield>
+            <subfield code="e">rda</subfield>
+            <subfield code="d">CH-ZuSLS UZB ZB</subfield>
+          </datafield>
+          <datafield ind1="0" ind2=" " tag="041">
+            <subfield code="a">ger</subfield>
+            <subfield code="a">fre</subfield>
+            <subfield code="a">eng</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="044">
+            <subfield code="c">XA-BE</subfield>
+            <subfield code="c">XA-DE</subfield>
+            <subfield code="c">XA-CH</subfield>
+            <subfield code="c">XA-AT</subfield>
+          </datafield>
+          <datafield ind1="7" ind2="4" tag="082">
+            <subfield code="a">320</subfield>
+            <subfield code="2">23sdnb</subfield>
+          </datafield>
+          <datafield ind1="7" ind2="4" tag="082">
+            <subfield code="a">340</subfield>
+            <subfield code="2">23sdnb</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="0" tag="245">
+            <subfield code="a">Grenzüberschreitende Zusammenarbeit nach der Pandemie</subfield>
+            <subfield code="b">rechtlich-institutionelle Flexibilisierung im Kontext des Aachener Vertrags = La coopération transfrontalière après la pandémie : flexibilisation juridique et institutionnelle dans le cadre du Traité d'Aix-la-Chapelle</subfield>
+            <subfield code="c">Joachim Beck (Hrsg./Éd.)</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="1" tag="246">
+            <subfield code="a">&lt;&lt;La&gt;&gt; coopération transfrontalière après la pandémie</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="1" tag="264">
+            <subfield code="a">Bruxelles</subfield>
+            <subfield code="a">Bern</subfield>
+            <subfield code="a">Berlin</subfield>
+            <subfield code="a">Wien</subfield>
+            <subfield code="b">Peter Lang</subfield>
+            <subfield code="c">[2021]</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="300">
+            <subfield code="a">610 Seiten</subfield>
+            <subfield code="b">Illustrationen</subfield>
+            <subfield code="c">21 cm, 781 g</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="336">
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="337">
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="338">
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="490">
+            <subfield code="a">Border studies - Borders and European Integration</subfield>
+            <subfield code="v">vol. 3</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="546">
+            <subfield code="a">Beiträge überwiegend in Deutsch und Französisch, einzelne Beiträge in Englisch</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="7" tag="630">
+            <subfield code="a">Vertrag von Aachen</subfield>
+            <subfield code="f">2019 Januar 22</subfield>
+            <subfield code="2">gnd</subfield>
+            <subfield code="0">(DE-588)1178565572</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">Grenzüberschreitende Kooperation</subfield>
+            <subfield code="2">gnd</subfield>
+            <subfield code="0">(DE-588)4194363-6</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="651">
+            <subfield code="a">Deutschland</subfield>
+            <subfield code="2">gnd</subfield>
+            <subfield code="0">(DE-588)4011882-4</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="651">
+            <subfield code="a">Frankreich</subfield>
+            <subfield code="2">gnd</subfield>
+            <subfield code="0">(DE-588)4018145-5</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="655">
+            <subfield code="a">Aufsatzsammlung</subfield>
+            <subfield code="2">gnd-content</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Beck, Joachim</subfield>
+            <subfield code="d">1965-</subfield>
+            <subfield code="4">edt</subfield>
+            <subfield code="0">(DE-588)139894489</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="8" tag="776">
+            <subfield code="i">Erscheint auch als</subfield>
+            <subfield code="n">Online-Ausgabe (ePub)</subfield>
+            <subfield code="z">9782875743756</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="8" tag="776">
+            <subfield code="i">Erscheint auch als</subfield>
+            <subfield code="n">Online-Ausgabe</subfield>
+            <subfield code="z">9782875743763</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="8" tag="776">
+            <subfield code="i">Erscheint auch als</subfield>
+            <subfield code="n">Online-Ausgabe (ePDF)</subfield>
+            <subfield code="z">9782875743749</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="8" tag="776">
+            <subfield code="i">Erscheint auch als</subfield>
+            <subfield code="n">Online-Ausgabe</subfield>
+            <subfield code="t">Grenzüberschreitende Zusammenarbeit nach der Pandemie La coopération transfrontalière après la pandémie</subfield>
+            <subfield code="d">Bruxelles : Peter Lang Verlag, 2022</subfield>
+            <subfield code="h">Online-Ressource, 612 Seiten</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="0" tag="830">
+            <subfield code="a">Border studies - Borders and European Integration</subfield>
+            <subfield code="v">3</subfield>
+            <subfield code="w">991170681899005501</subfield>
+          </datafield>
+          <datafield ind1="4" ind2="2" tag="856">
+            <subfield code="m">B:DE-101</subfield>
+            <subfield code="q">application/pdf</subfield>
+            <subfield code="u">https://d-nb.info/124239060X/04</subfield>
+            <subfield code="3">Inhaltsverzeichnis</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_UBS</subfield>
+            <subfield code="6">9972678155305504</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_UZB</subfield>
+            <subfield code="6">99117328179505508</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="900">
+            <subfield code="a">Stoppsignal FRED</subfield>
+            <subfield code="x">UBS/A100/202303</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="900">
+            <subfield code="a">OK_GND</subfield>
+            <subfield code="x">UZB/Z01/202306/trun</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="949">
+            <subfield code="a">https://d-nb.info/124239060X/04</subfield>
+          </datafield>
+        </record>
+      </recordData>
+      <recordIdentifier>991171135704605501</recordIdentifier>
+      <recordPosition>1</recordPosition>
+    </record>
+  </records>
+  <extraResponseData xmlns:xb="http://www.exlibris.com/repository/search/xmlbeans/">
+    <xb:exact>true</xb:exact>
+    <xb:responseDate>2025-02-01T23:39:13+0100</xb:responseDate>
+  </extraResponseData>
+</searchRetrieveResponse>

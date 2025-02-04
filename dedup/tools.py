@@ -158,12 +158,15 @@ def remove_ns(data: etree.Element) -> etree.Element:
     temp_data = re.sub(r'\s?xmlns="[^"]+"', '', temp_data).encode()
     return etree.fromstring(temp_data)
 
-def is_empty(value) -> bool:
+def is_empty(value, key=None) -> bool:
     """Check if a value is None, an empty string, or an empty list."""
+
     if value is None:
         return True
     elif isinstance(value, str) and len(value.strip()) == 0:
         return True
     elif isinstance(value, list) and len(value) == 0:
+        return True
+    elif isinstance(value, dict) and key not in value:
         return True
     return False

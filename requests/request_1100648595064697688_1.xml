@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+  <version>1.2</version>
+  <numberOfRecords>1</numberOfRecords>
+  <records>
+    <record>
+      <recordSchema>marcxml</recordSchema>
+      <recordPacking>xml</recordPacking>
+      <recordData>
+        <record xmlns="http://www.loc.gov/MARC21/slim">
+          <leader>01013nam a2200265 c 4500</leader>
+          <controlfield tag="001">991055037209705501</controlfield>
+          <controlfield tag="005">20230411205520.0</controlfield>
+          <controlfield tag="008">120202s2013    maua     |||| 001 0 eng|^</controlfield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">9780132805575</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">013280557X</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(swissbib)180532987-41slsp_network</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">180532987</subfield>
+            <subfield code="9">ExL</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(NEBIS)007080980EBI01</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="040">
+            <subfield code="a">DLC</subfield>
+            <subfield code="d">CH-ZuSLS</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="100">
+            <subfield code="a">Punch, William</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="0" tag="245">
+            <subfield code="a">&lt;&lt;The&gt;&gt; practice of computing using Python</subfield>
+            <subfield code="c">William Punch, Richard Enbody</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="250">
+            <subfield code="a">2nd ed.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="1" tag="264">
+            <subfield code="a">Boston</subfield>
+            <subfield code="b">Pearson</subfield>
+            <subfield code="c">2013</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="300">
+            <subfield code="a">764 p.</subfield>
+            <subfield code="b">ill.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">Python (Programmiersprache)</subfield>
+            <subfield code="2">idszbz</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">PYTHON (LANGAGES DE PROGRAMMATION)</subfield>
+            <subfield code="9">fre</subfield>
+            <subfield code="0">(ETHUDK)000062602</subfield>
+            <subfield code="2">ethudk</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Enbody, Richard</subfield>
+          </datafield>
+          <datafield ind1="4" ind2=" " tag="856">
+            <subfield code="3">Titelblatt und Inhaltsverzeichnis</subfield>
+            <subfield code="u">https://toc.library.ethz.ch/objects/pdf/z01_978-0-13-280557-5_01.pdf</subfield>
+            <subfield code="q">pdf</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_UZB</subfield>
+            <subfield code="6">990070809800205508</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_EPF</subfield>
+            <subfield code="6">990070809800205516</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="900">
+            <subfield code="a">IDSZ2zbzmon201205l</subfield>
+            <subfield code="c">IDSZ2tres</subfield>
+            <subfield code="d">IDSZ2zbzswk201205b</subfield>
+            <subfield code="e">IDSZ2tschu</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="949">
+            <subfield code="a">https://toc.library.ethz.ch/objects/pdf/z01_978-0-13-280557-5_01.pdf</subfield>
+          </datafield>
+        </record>
+      </recordData>
+      <recordIdentifier>991055037209705501</recordIdentifier>
+      <recordPosition>1</recordPosition>
+    </record>
+  </records>
+  <extraResponseData xmlns:xb="http://www.exlibris.com/repository/search/xmlbeans/">
+    <xb:exact>true</xb:exact>
+    <xb:responseDate>2025-02-01T23:39:12+0100</xb:responseDate>
+  </extraResponseData>
+</searchRetrieveResponse>

@@ -18,11 +18,8 @@ class TestScorePublishers(unittest.TestCase):
         self.assertEqual(ed, 'HARRISON S EDITION')
 
     def test_evaluate_norm_editions(self):
-        score = evaluate_norm_editions('17;17. AUFLAGE ORIGINALAUSGABE', '16;16. AUFLAGE ORIGINALAUSGABE')
+        score = evaluate_norm_editions([17], [16])
         self.assertLess(score, 0.1)
 
-        score = evaluate_norm_editions('17;17. AUFLAGE ORIGINALAUSGABE', '17;17. AUFLAGE')
-        self.assertGreater(score, 0.9)
-
-        score = evaluate_norm_editions('2;Sec. AUFLAGE ORIGINALAUSGABE', '2;2. AUFLAGE')
+        score = evaluate_norm_editions([17], [17])
         self.assertGreater(score, 0.9)
