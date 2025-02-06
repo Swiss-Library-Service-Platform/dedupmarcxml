@@ -6,14 +6,11 @@ and evaluate the similarity between publisher names using vectorized systems.
 """
 
 import re
-import pickle
-import os
 import numpy as np
 import Levenshtein
 from typing import Tuple
 from dedup import tools
 
-_publisher_data = pickle.load(open(os.path.join(os.path.dirname(__file__), 'data/publishers_data.pickle'), 'rb'))
 
 def normalize_publishers(pub1: str, pub2: str) -> Tuple[str, str, float]:
     """Normalize publisher names and calculate a factor to correct small differences
@@ -54,7 +51,7 @@ def normalize_txt(txt, keep_dot=False) -> str:
     """
 
     # Solve abbreviations specific to publishers
-    for abbreviation, translation in _publisher_data['abbreviations'].items():
+    for abbreviation, translation in tools.publishers_data['abbreviations'].items():
         txt = re.sub(r'\b' + abbreviation + r'\b', translation, txt)
 
     # Transform to ASCII and uppercase
@@ -122,7 +119,7 @@ def correct_small_differences(pub1: str, pub2: str) -> Tuple[str, str, float]:
 
             # To decide the winner between the matching word of publisher 1 and the matching word of publisher 2,
             # we choose the most common.
-            if _publisher_data['norm_counter'].get(best_w2, 1) < _publisher_data['norm_counter'].get(w1, 1):
+            if tools.publishers_data['norm_counter'].get(best_w2, 1) < tools.publishers_data['norm_counter'].get(w1, 1):
                 pub1 = re.sub(r'\b' + w1 + r'\b', best_w2, pub1)
             else:
                 pub2 = re.sub(r'\b' + best_w2 + r'\b', w1, pub2)
@@ -167,14 +164,14 @@ def evaluate_publishers_vect(pub1, pub2):
         if w in pub1_set:
 
             # if the word is absent of the model, we assign max value: 1
-            vect1.append(normalize_vectors(_publisher_data['norm_counter'].get(w, 1)))
+            vect1.append(normalize_vectors(tools.publishers_data['norm_counter'].get(w, 1)))
         else:
             # if word is absent, vector value will be 0
             vect1.append(0)
 
         # Build vector for publisher 2
         if w in pub2_set:
-            vect2.append(normalize_vectors(_publisher_data['norm_counter'].get(w, 1)))
+            vect2.append(normalize_vectors(tools.publishers_data['norm_counter'].get(w, 1)))
         else:
             vect2.append(0)
 

@@ -470,7 +470,7 @@ class BriefRecFactory:
         res_format = {'type': BriefRecFactory.get_bib_resource_type(bib),
                       'access': BriefRecFactory.get_access_type(bib),
                       'analytical': BriefRecFactory.check_is_analytical(bib),
-                      'summary_33x': BriefRecFactory.get_33x_summary(bib)}
+                      'f33x': BriefRecFactory.get_33x_summary(bib)}
 
         return res_format
 
@@ -647,9 +647,9 @@ class BriefRecFactory:
                 if code == 't':
                     parent_information['title'] = BriefRecFactory.normalize_title(subfield.text)
                 elif code == 'x':
-                    parent_information['issn'] = BriefRecFactory.normalize_issn(subfield.text)
+                    parent_information['std_num'] = BriefRecFactory.normalize_issn(subfield.text)
                 elif code == 'z':
-                    parent_information['isbn'] = BriefRecFactory.normalize_isbn(subfield.text)
+                    parent_information['std_num'] = BriefRecFactory.normalize_isbn(subfield.text)
                 elif code == 'g':
                     txt = subfield.text
 

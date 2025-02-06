@@ -4,14 +4,75 @@ General tools to clean and normalize text
 
 import unicodedata
 import re
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Callable, List, Dict
 import Levenshtein
 import numpy as np
 from lxml import etree
 import pickle
 import os
+from functools import wraps
+import itertools
 
 editions_data = pickle.load(open(os.path.join(os.path.dirname(__file__), 'data/editions_data.pickle'), 'rb'))
+publishers_data = pickle.load(open(os.path.join(os.path.dirname(__file__), 'data/publishers_data.pickle'), 'rb'))
+
+def handle_values_lists(func: Callable) -> Callable:
+    """
+    Decorator to handle lists of values instead of single strings.
+    It compares each value from the first list with each value from the second list
+    and returns the maximum score found, with small penalty for each value not matched.
+    """
+    @wraps(func)
+    def wrapper(values1: List[str]|str, values2: List[str]|str) -> float:
+        if not isinstance(values1, list):
+            values1 = [values1]
+        if not isinstance(values2, list):
+            values2 = [values2]
+
+        max_score = 0.0
+
+        # Compare each value from the first list with each value from the second list
+        for p1 in values1:
+            for p2 in values2:
+                current_score = func(p1, p2)
+                if current_score > max_score:
+                    max_score = current_score
+
+        return max_score
+
+    return wrapper
+
+
+def handle_missing_values(default_score: float = 0.2, key=None) -> Callable:
+    """
+    Decorator to handle missing or invalid input values.
+    If either input is None or an empty string/list, it returns a default score.
+
+    :param default_score: The score to return if input is missing or invalid.
+    :param key: The key to use to check for missing values in a dictionary.
+
+    :return: The decorated function.
+    """
+    def decorator(func: Callable) -> Callable:
+        @wraps(func)
+        def wrapper(
+            values1: Optional[str|List[str]|Dict],
+            values2: Optional[str|List[str]|Dict]
+        ) -> float:
+
+            if is_empty(values1, key=key) and is_empty(values2, key=key):
+                return 0.0
+            elif is_empty(values1, key=key) or is_empty(values2, key=key):
+                return default_score / 2
+
+            # If inputs are valid, call the original function
+            result = func(values1, values2)
+            return result * (1 - default_score) + default_score
+
+        return wrapper
+
+    return decorator
+
 
 def to_ascii(txt: str) -> str:
     """Transform txt to ascii, remove special chars, make upper case
@@ -167,6 +228,30 @@ def is_empty(value, key=None) -> bool:
         return True
     elif isinstance(value, list) and len(value) == 0:
         return True
-    elif isinstance(value, dict) and key not in value:
+    elif isinstance(value, dict) and key is not None and key not in value:
+        return True
+    elif isinstance(value, dict) and key is None and len(value) == 0:
         return True
     return False
+
+def get_unique_combinations(l1: List[str], l2: List[str]) -> List[List[Tuple]]:
+    """get_unique_combinations(l1: List[str], l2: List[str]) -> List[List[Tuple]]
+    Used to search the best match with names like authors or publishers.
+
+    :param l1: list of names to compare
+    :param l2: list of names to compare
+
+    :return: list of unique combinations of names
+    """
+    if len(l1) < len(l2):
+        l2, l1 = (l1, l2)
+
+    unique_combinations = []
+    permutations = itertools.permutations(l1, len(l2))
+
+    # zip() is called to pair each permutation
+    # and shorter list element into combination
+    for permutation in permutations:
+        zipped = zip(permutation, l2)
+        unique_combinations.append(list(zipped))
+    return unique_combinations

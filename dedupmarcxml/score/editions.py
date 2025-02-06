@@ -12,9 +12,6 @@ import os
 from dedup import tools
 
 
-_editions_data = pickle.load(open(os.path.join(os.path.dirname(__file__), 'data/editions_data.pickle'), 'rb'))
-
-
 def normalize_edition(edition: str) -> str:
     """Normalize publisher names and calculate a factor to correct small differences
 
@@ -29,8 +26,8 @@ def normalize_edition(edition: str) -> str:
     edition = tools.to_ascii(edition)
     edition = tools.remove_special_chars(edition, keep_dot=True)
 
-    for k in _editions_data.keys():
-        edition = re.sub(r'\b' + k + r'\b', str(_editions_data[k]), edition)
+    for k in tools.editions_data.keys():
+        edition = re.sub(r'\b' + k + r'\b', str(tools.editions_data[k]), edition)
 
     # Find all numbers in the edition statement
     numbers = sorted([int(f) for f in re.findall(r'\d+', edition)])
