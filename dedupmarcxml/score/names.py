@@ -2,7 +2,7 @@ import numpy as np
 import Levenshtein
 from typing import List
 
-from dedup import tools
+from dedupmarcxml import tools
 import re
 
 def evaluate_lists_names(names1: List[str], names2: List[str]) -> float:

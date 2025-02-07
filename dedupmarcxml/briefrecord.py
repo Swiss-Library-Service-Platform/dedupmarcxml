@@ -1,9 +1,9 @@
 from lxml import etree
 from typing import List, Optional, Dict
 import re
-import tools
 import logging
 import json
+from dedupmarcxml import tools
 
 
 class BriefRec:

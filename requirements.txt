@@ -2,3 +2,7 @@ levenshtein
 numpy
 lxml
 almasru
+setuptools
+twine
+sphinx
+sphinx_rtd_theme

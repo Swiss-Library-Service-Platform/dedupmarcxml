@@ -9,7 +9,7 @@ create list of stop words
 import re
 import pickle
 import os
-from dedup import tools
+from dedupmarcxml import tools
 
 
 def normalize_edition(edition: str) -> str:

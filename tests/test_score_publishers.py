@@ -1,6 +1,6 @@
 import unittest
 
-from dedup.score_publishers import *
+from dedupmarcxml.score.publishers import *
 
 class TestScorePublishers(unittest.TestCase):
 

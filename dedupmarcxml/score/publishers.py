@@ -9,7 +9,7 @@ import re
 import numpy as np
 import Levenshtein
 from typing import Tuple
-from dedup import tools
+from dedupmarcxml import tools
 
 
 def normalize_publishers(pub1: str, pub2: str) -> Tuple[str, str, float]:

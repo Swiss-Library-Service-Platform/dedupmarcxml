@@ -1,7 +1,7 @@
 from almasru.client import SruClient, SruRecord, SruRequest
 from almasru import config_log
 import unittest
-from dedup import BriefRecFactory, BriefRec
+from dedupmarcxml import BriefRec
 import shutil
 
 config_log()
@@ -12,7 +12,7 @@ class TestSruClient(unittest.TestCase):
         mms_id = '991055037209705501' # Book physical
         rec = SruRecord(mms_id)
         rec = BriefRec(rec.data)
-        print(rec)
+
         self.assertEqual(rec.data['extent']['nb'][0], 764)
         self.assertEqual(rec.data['format']['access'], 'Physical')
         self.assertEqual(rec.data['editions'][0]['nb'][0], 2)
@@ -70,3 +70,11 @@ class TestSruClient(unittest.TestCase):
 
         self.assertTrue('La coopération transfrontalière après la pandémie' in rec.data['titles'])
         self.assertTrue('Peter Lang' in rec.data['publishers'])
+
+
+    def test_create_brief_record_8(self):
+        mms_id = '991036265429705501'
+
+        rec = SruRecord(mms_id)
+        rec = BriefRec(rec.data)
+        print(rec)

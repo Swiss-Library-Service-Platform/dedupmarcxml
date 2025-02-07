@@ -1,5 +1,5 @@
 import unittest
-from dedup.score_extent import get_rounded_extent, calc_with_sets, calc_with_sum
+from dedupmarcxml.score.extent import get_rounded_extent, calc_with_sets, calc_with_sum
 
 class TestScoreExtent(unittest.TestCase):
 

@@ -1,5 +1,5 @@
-import dedup.score.names
-import dedup.score.publishers
-import dedup.score.extent
-import dedup.score.editions
-import dedup.score.methods
+import dedupmarcxml.score.names
+import dedupmarcxml.score.publishers
+import dedupmarcxml.score.extent
+import dedupmarcxml.score.editions
+import dedupmarcxml.score.methods

@@ -1,0 +1,24 @@
+[project]
+name = "almasru"
+version = "2.2.15"
+authors = [
+  { name="Raphaël Rey", email="raphael.rey@slsp.ch" },
+]
+description = "This python module is a tool to use Alma SRU. it manages the logs and the backup of the records."
+readme = "readme.rst"
+requires-python = ">=3"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+dependencies = ["lxml",
+                "numpy",
+                "Levenshtein"]
+
+[tool.setuptools.packages.find]
+include = ["dedupmarcxml", "dedupmarcxml.*"]
+
+[project.urls]
+"Homepage" = "https://github.com/Swiss-Library-Service-Platform/dedupmarcxml"
+"Bug Tracker" = "https://github.com/Swiss-Library-Service-Platform/dedupmarcxml/issues"

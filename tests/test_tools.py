@@ -1,5 +1,5 @@
 import unittest
-from dedup.tools import *
+from dedupmarcxml.tools import *
 
 class TestTools(unittest.TestCase):
 

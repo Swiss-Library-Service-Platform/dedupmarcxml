@@ -1,8 +1,11 @@
 import unittest
 
-from dedup.score import *
-from dedup.score_editions import *
-from dedup.briefrecord import BriefRecFactory, BriefRec
+from dedupmarcxml.evaluate import *
+from almasru.client import SruClient, SruRecord, SruRequest
+
+
+SruClient.set_base_url('https://swisscovery.slsp.ch/view/sru/41SLSP_NETWORK')
+
 
 class TestScore(unittest.TestCase):
 
@@ -76,6 +79,95 @@ class TestScore(unittest.TestCase):
 
         score4 = evaluate_identifiers(['123'], ['456'])
         self.assertTrue(score4 < 0.3)
+
+    def test_evaluate_titles(self):
+        score1 = evaluate_titles('Mozrt', 'Mozart')
+        self.assertTrue(score1 > 0.9)
+
+        score2 = evaluate_titles('Mozart, un compositeur de génie', 'Mozart, un compositeur')
+        self.assertTrue(0.8 < score2 < 0.95, f'0.8 < {score2} < 0.95')
+
+        score3 = evaluate_titles('Mozart', 'Beethoven')
+        self.assertTrue(score3 < 0.5)
+
+        score4 = evaluate_titles('Magnifique livre: il adore la Montagne', 'Il adore la Montagne')
+        self.assertTrue(score4 > 0.8)
+
+        score4 = evaluate_titles(['Ein zwei drei', 'Un deux trois'],
+                                 ['Vier fün sechs', 'Un deux trois'])
+        self.assertTrue(score4 > 0.9)
+
+
+    def test_evaluate_creators(self):
+        score1 = evaluate_creators(['Mozart'], ['Mozart'])
+        self.assertTrue(score1 > 0.9)
+
+        score2 = evaluate_creators(['Mozart, un compositeur de génie'], ['Mozart, un compositeur'])
+        self.assertTrue(0.7 < score2 < 0.9, f'0.7 < {score2} < 0.9')
+
+        score3 = evaluate_creators(['Mozart'], ['Beethoven'])
+        self.assertTrue(score3 < 0.4)
+
+        score4 = evaluate_creators(['Bernard, Jean', 'Filin, Jules'], ['Bernard, Jean', 'Filin, J.'])
+        self.assertTrue(score4 > 0.8)
+
+
+    def test_evaluate_parent(self):
+        parent1 = {"year": 2013,
+                   "parts": {
+                       "nb": [
+                           2013,
+                           157,
+                           107
+                       ],
+                       "txt": "2013/107/157"
+                   },
+                   "title": "Schweizerische Zeitschrift für Religions- und Kulturgeschichte = Revue suisse d'histoire religieuse et culturelle = Rivista svizzera di storia religiosa e culturale"
+                   }
+
+        parent2 = {"year": 2013,
+                   "parts": {
+                       "nb": [
+                           2013,
+                           157,
+                           107
+                       ],
+                       "txt": "2013/107/157"
+                   },
+                   "title": "Schweizerische Zeitschrift für Religions- und Kulturgeschichte"
+                   }
+
+        score1 = evaluate_parent(parent1, parent2)
+        self.assertTrue(score1 > 0.7, f'{score1} > 0.7')
+
+
+    def test_evaluate_records_similarity_1(self):
+        mms_id = '991036265429705501'
+
+        rec = SruRecord(mms_id)
+        rec = BriefRec(rec.data)
+
+        sim_score = evaluate_records_similarity(rec, rec)
+        self.assertGreater(sim_score['sys_nums'], 0.99)
+        self.assertLess(sim_score['std_nums'], 0.01)
+
+        score = get_similarity_score(sim_score)
+        self.assertGreater(score, 0.99)
+
+    def test_evaluate_records_similarity_2(self):
+        mms_id1 = '991036265429705501'
+        mms_id2 = '991057213849705501'
+        rec1 = SruRecord(mms_id1)
+        rec1 = BriefRec(rec1.data)
+        rec2 = SruRecord(mms_id2)
+        rec2 = BriefRec(rec2.data)
+        sim_score = evaluate_records_similarity(rec1, rec2)
+        self.assertTrue(0.5 < sim_score['title'] < 0.7, f'0.5 < {sim_score["title"]} < 0.7')
+        self.assertTrue(0.1 < sim_score['parent'] < 0.4, f'0.1 < {sim_score["parent"]} < 0.4')
+
+        score = get_similarity_score(sim_score)
+        self.assertTrue(0.4 < score < 0.6, f'0.3 < {score} < 0.5')
+
 
 if __name__ == '__main__':
     unittest.main()

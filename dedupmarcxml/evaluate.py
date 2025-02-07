@@ -4,11 +4,11 @@ Module to evaluate similarity between records
 This module is the entry point to evaluate similarity between records. It uses
 different submodules to evaluate different fields.
 """
-# from dedup.score. import score_publishers, score_editions, score_extent, score_names
-from dedup import score as scorelib
-from dedup import tools
+# from dedupmarcxml.score. import score_publishers, score_editions, score_extent, score_names
+from dedupmarcxml import score as scorelib
+from dedupmarcxml import tools
 from typing import List, Dict, Optional
-from dedup.briefrecord import BriefRec, BriefRecFactory
+from dedupmarcxml.briefrecord import BriefRec, BriefRecFactory
 import numpy as np
 from copy import deepcopy
 
@@ -386,19 +386,17 @@ def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec) -> Dict[str, flo
 
 
 def get_similarity_score(sim_analysis: Dict[str, float],
-                         method: Optional[str] = None) -> float:
+                         method: Optional[str] = 'mean') -> float:
     """Return the similarity score between two records
 
     It uses the result of the evaluation of similarity of two records
-    (func:`dedup.evaluate.evaluate_records_similarity`).
+    (func:`dedupmarcxml.evaluate.evaluate_records_similarity`).
 
     :param sim_analysis: dictionary containing the results of the evaluation of similarity of two records
     :param method: method to use to calculate the similarity score, default method is the mean
 
     :return: similarity score between two records as float
     """
-    if method == 'mean':
-        return scorelib.methods.mean(sim_analysis)
 
     return scorelib.methods.mean(sim_analysis)
 
