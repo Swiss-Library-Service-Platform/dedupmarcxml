@@ -4,7 +4,7 @@ General tools to clean and normalize text
 
 import unicodedata
 import re
-from typing import Tuple, Optional, Callable, List, Dict
+from typing import Tuple, Optional, Callable, List, Dict, Union
 import Levenshtein
 import numpy as np
 from lxml import etree
@@ -23,7 +23,7 @@ def handle_values_lists(func: Callable) -> Callable:
     and returns the maximum score found, with small penalty for each value not matched.
     """
     @wraps(func)
-    def wrapper(values1: List[str]|str, values2: List[str]|str) -> float:
+    def wrapper(values1: Union[List[str], str], values2: Union[List[str],str]) -> float:
         if not isinstance(values1, list):
             values1 = [values1]
         if not isinstance(values2, list):
@@ -56,8 +56,8 @@ def handle_missing_values(default_score: float = 0.2, key=None) -> Callable:
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(
-            values1: Optional[str|List[str]|Dict],
-            values2: Optional[str|List[str]|Dict]
+            values1: Optional[Union[str, List[str], Dict]],
+            values2: Optional[Union[str, List[str], Dict]]
         ) -> float:
 
             if is_empty(values1, key=key) and is_empty(values2, key=key):

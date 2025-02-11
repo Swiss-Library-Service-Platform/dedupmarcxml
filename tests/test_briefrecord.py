@@ -21,7 +21,6 @@ class TestSruClient(unittest.TestCase):
         mms_id = '991171854084705501' # Braille
         rec = SruRecord(mms_id)
         rec = BriefRec(rec.data)
-
         self.assertEqual(rec.data['format']['type'], 'Book')
         self.assertEqual(rec.data['format']['access'], 'Braille')
         self.assertEqual(rec.data['years']['y2'], 2020)
@@ -43,7 +42,7 @@ class TestSruClient(unittest.TestCase):
 
         self.assertTrue(rec.data['format']['analytical'])
         self.assertEqual(rec.data['parent']['year'], 1985)
-        self.assertEqual(rec.data['short_title'], 'Mozart')
+        self.assertTrue('Mozart' in rec.data['short_titles'], rec.data['short_titles'])
 
 
     def test_create_brief_record_5(self):
@@ -68,13 +67,14 @@ class TestSruClient(unittest.TestCase):
         rec = SruRecord(mms_id)
         rec = BriefRec(rec.data)
 
-        self.assertTrue('La coopération transfrontalière après la pandémie' in rec.data['titles'])
+        self.assertTrue('La coopération transfrontalière après la pandémie' in [t['m'] for t in rec.data['titles']],
+                        [t['m'] for t in rec.data['titles']])
         self.assertTrue('Peter Lang' in rec.data['publishers'])
 
 
-    def test_create_brief_record_8(self):
-        mms_id = '991036265429705501'
-
-        rec = SruRecord(mms_id)
-        rec = BriefRec(rec.data)
-        print(rec)
+    # def test_create_brief_record_8(self):
+    #     mms_id = '991036265429705501'
+    #
+    #     rec = SruRecord(mms_id)
+    #     rec = BriefRec(rec.data)
+    #     print(rec)

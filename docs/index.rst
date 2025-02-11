@@ -25,10 +25,10 @@ Base example code
 
     # Import libraries
     from dedupmarcxml.evaluate import evaluate_records_similarity, get_similarity_score
-    from dedupmarcxml.briefrecord import Briefrec
+    from dedupmarcxml.briefrecord import BriefRec
 
-    rec1 = Briefrec(etree.Element)
-    rec2 = Briefrec(etree.Element)
+    rec1 = BriefRec(etree.Element)
+    rec2 = BriefRec(etree.Element)
 
     score_detailed = evaluate_records_similarity(rec1, rec2, method=mean)
 
@@ -41,9 +41,8 @@ Contents
 .. toctree::
    :maxdepth: 1
 
-
 .. autoclass:: dedupmarcxml.briefrecord::BriefRec
-    :members:
+  :members:
 
 .. autofunction:: dedupmarcxml.evaluate::evaluate_records_similarity
 

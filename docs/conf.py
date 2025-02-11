@@ -12,13 +12,14 @@ sys.path.insert(0, os.path.abspath('..'))
 
 project = 'dedupmarcxml'
 author = 'Raphaël Rey'
-version = '0.1.0'
+version = '0.1.5'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel"
 ]
 
 templates_path = ['_templates']

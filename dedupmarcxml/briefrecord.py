@@ -1,5 +1,5 @@
 from lxml import etree
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Literal, Union
 import re
 import logging
 import json
@@ -69,8 +69,73 @@ class BriefRecFactory:
     summarize the result in a json object.
     """
 
-    @staticmethod
-    def normalize_title(title: str) -> str:
+    @classmethod
+    def find(cls, bib: etree.Element, path:str) -> Optional[Union[str,List[Dict]]]:
+        """Find a value in the MARCXML record
+
+        :param bib: MARCXML record
+        :param path: path to the value to find
+
+        :return: value found or None if not found
+        """
+        path = path.split('$$')
+        path_xml = ''
+
+        if path[0] == 'leader':
+            path_xml = './/leader'
+
+        elif path[0].startswith('00'):
+            path_xml = f'.//controlfield[@tag="{path[0]}"]'
+
+        elif len(path) == 2:
+            path_xml = f'.//datafield[@tag="{path[0]}"]/subfield[@code="{path[1]}"]'
+
+        elif len(path) == 1:
+            path_xml = f'.//datafield[@tag="{path[0]}"]'
+            result = bib.find(path_xml)
+            if result is None:
+                return None
+
+            subfields = [{subfield.get('code'): subfield.text} for subfield in result]
+            return None if len(subfields) == 0 else subfields
+
+        result = bib.find(path_xml)
+
+        return result.text if result is not None else None
+
+
+    @classmethod
+    def findall(cls, bib: etree.Element, path:str) -> List[Union[str, List[Dict]]]:
+        """Find a value in the MARCXML record
+
+        :param bib: MARCXML record
+        :param path: path to the value to find
+
+        :return: value found or None if not found
+        """
+        path = path.split('$$')
+
+        if len(path) == 2:
+            path_xml = f'.//datafield[@tag="{path[0]}"]/subfield[@code="{path[1]}"]'
+
+            results = bib.findall(path_xml)
+
+            return [result.text for result in results] if len(results) > 0 else []
+
+        elif len(path) == 1:
+            # Transform the data to json
+            path_xml = f'.//datafield[@tag="{path[0]}"]'
+
+            results = bib.findall(path_xml)
+            fields = []
+            for result in results:
+                fields.append([{subfield.get('code'): subfield.text} for subfield in result])
+            return fields
+
+        return []
+
+    @classmethod
+    def normalize_title(cls, title: str) -> str:
         """normalize_title(title: str) -> str
         Normalize title string
 
@@ -84,8 +149,8 @@ class BriefRecFactory:
         title = title.replace('<<', '').replace('>>', '')
         return title
 
-    @staticmethod
-    def normalize_extent(extent: str) -> Optional[Dict]:
+    @classmethod
+    def normalize_extent(cls, extent: str) -> Optional[Dict]:
         """Normalize extent string and return a dictionary with numbers
 
         :param extent: extent to normalize
@@ -99,8 +164,8 @@ class BriefRecFactory:
 
         return {'nb': sorted(extent_list, reverse=True), 'txt': extent}
 
-    @staticmethod
-    def normalize_isbn(isbn: str) -> Optional[str]:
+    @classmethod
+    def normalize_isbn(cls, isbn: str) -> Optional[str]:
         """Suppress hyphen and textual information of the provided isbn
 
         :param isbn: raw string containing isbn
@@ -112,8 +177,8 @@ class BriefRecFactory:
         if m is not None:
             return m.group()
 
-    @staticmethod
-    def normalize_issn(issn: str) -> Optional[str]:
+    @classmethod
+    def normalize_issn(cls, issn: str) -> Optional[str]:
         """Suppress hyphen and textual information of the provided issn
 
         :param issn: raw string containing issn
@@ -125,8 +190,8 @@ class BriefRecFactory:
         if m is not None:
             return m.group()
 
-    @staticmethod
-    def extract_year(txt: str) -> Optional[int]:
+    @classmethod
+    def extract_year(cls, txt: str) -> Optional[int]:
         """extract_year(str) -> Optional[int]
         Extract a substring of 4 digits
 
@@ -138,24 +203,20 @@ class BriefRecFactory:
         if m is not None:
             return int(m.group())
 
-    @staticmethod
-    def get_rec_id(bib: etree.Element) -> Optional[str]:
-        """get_rec_id(bib: etree.Element) -> Optional[str]
-        get_rec_id(bib) -> Optional[str]
+    @classmethod
+    def get_rec_id(cls, bib: etree.Element) -> Optional[str]:
+        """
         Get the record ID
 
         :param bib: :class:`etree.Element`
 
         :return: record ID or None if not found
         """
-        controlfield001 = bib.find('.//controlfield[@tag="001"]')
-        if controlfield001 is None:
-            return None
-        return controlfield001.text
+        return cls.find(bib, '001')
 
-    @staticmethod
-    def get_std_num(bib: etree.Element) -> Optional[List[str]]:
-        """get_other_std_num(bib: etree.Element) -> Optional[List[str]]
+    @classmethod
+    def get_std_num(cls, bib: etree.Element) -> Optional[List[str]]:
+        """
         Get a list of standardized numbers like DOI
 
         :param bib: :class:`etree.Element`
@@ -164,41 +225,37 @@ class BriefRecFactory:
         """
 
         # Get isbn fields
-        fields = bib.findall('.//datafield[@tag="020"]/subfield[@code="a"]')
-        raw_isbns = set([field.text for field in fields])
+        raw_isbns = set(cls.findall(bib, '020$$a'))
         isbns = set()
 
         for raw_isbn in raw_isbns:
-            isbn = BriefRecFactory.normalize_isbn(raw_isbn)
+            isbn = cls.normalize_isbn(raw_isbn)
             if isbn is not None:
                 isbns.add(isbn)
 
         # Get ISSN fields
-        fields = bib.findall('.//datafield[@tag="022"]/subfield[@code="a"]')
-        raw_issns = set([field.text for field in fields])
+        raw_issns = set(cls.findall(bib, '022$$a'))
         issns = set()
 
         for raw_issn in raw_issns:
-            issn = BriefRecFactory.normalize_issn(raw_issn)
+            issn = cls.normalize_issn(raw_issn)
             if issn is not None:
                 issns.add(issn)
 
         # Get other standardized numbers
-        fields = bib.findall('.//datafield[@tag="024"]/subfield[@code="a"]')
-        std_nums = set([field.text for field in fields])
+        std_nums = set(cls.findall(bib, '024$$a'))
 
         # Get other publisher numbers
-        fields = bib.findall('.//datafield[@tag="028"]/subfield[@code="a"]')
-        pub_nums = set([field.text for field in fields])
+        pub_nums = set(cls.findall(bib, '028$$a'))
 
         if len(isbns) == 0 and len(issns) == 0 and len(std_nums) == 0 and pub_nums == 0:
             return None
 
         return list(set.union(isbns, issns, std_nums, pub_nums))
 
-    @staticmethod
-    def get_leader_pos67(bib: etree.Element) -> Optional[str]:
-        """get_leader_pos67(bib: etree.Element) -> Optional[str]
+    @classmethod
+    def get_leader_pos67(cls, bib: etree.Element) -> Optional[str]:
+        """
         Get the leader position 6 and 7
 
         Used to determine the format of the record
@@ -208,112 +265,67 @@ class BriefRecFactory:
         :return: leader position 6 and 7 or None if not found
         """
 
-        leader = bib.find('.//leader')
+        leader = cls.find(bib, 'leader')
         if leader is not None:
-            return leader.text[6:8]
+            return leader[6:8]
 
-    @staticmethod
-    def get_sys_nums(bib: etree.Element) -> Optional[List[str]]:
-        """get_sysnums(bib: etree.Element) -> Optional[List[str]]
+    @classmethod
+    def get_sys_nums(cls, bib: etree.Element) -> Optional[List[str]]:
+        """
         Get a set of system numbers
 
         :param bib: :class:`etree.Element`
 
         :return: set of system numbers
         """
-        fields = bib.findall('.//datafield[@tag="035"]/subfield[@code="a"]')
-        sys_nums = set([field.text for field in fields])
+        sys_nums = set(cls.findall(bib, '035$$a'))
+
         if len(sys_nums) == 0:
             return None
 
         return list(sys_nums)
 
-    @staticmethod
-    def get_title(bib: etree.Element) -> Optional[str]:
-        """Get normalized content of 245$a
+    @classmethod
+    def get_titles(cls, bib: etree.Element) -> List[Dict[Literal['m']: str, Literal['s']: str]]:
+        """
+        Get all titles of the record.
+
+        This function retrieves the titles from the 245 and 246 fields of a MARC record. The
+        function returns a list of dictionaries with keys 'm' and 's' for the main and
+        subtitle of the title.
 
         :param bib: :class:`etree.Element`
 
-        :return: normalized content of field 245$a
+        :return: List of titles of the record.
         """
-        title_field = bib.find('.//datafield[@tag="245"]/subfield[@code="a"]')
-        if title_field is not None:
-            return BriefRecFactory.normalize_title(title_field.text)
-
-    @staticmethod
-    def get_subtitle(bib: etree.Element) -> Optional[str]:
-        """get_subtitle(bib: etree.Element) -> Optional[str]
-        Get normalized content of 245$b
-
-        :param bib: :class:`etree.Element`
-
-        :return: normalized content of field 245$b or None if not found
-        """
-
-        sub_title_field = bib.find('.//datafield[@tag="245"]/subfield[@code="b"]')
-        if sub_title_field is not None:
-            return BriefRecFactory.normalize_title(sub_title_field.text)
-
-    @staticmethod
-    def get_part_title(bib: etree.Element) -> Optional[str]:
-        """get_part_title(bib: etree.Element) -> Optional[str]
-
-        :param bib: :class:`etree.Element`
-
-        :return: content of 245$p or None if not found
-        """
-        part_title_field = bib.find('.//datafield[@tag="245"]/subfield[@code="p"]')
-        if part_title_field is not None:
-            return BriefRecFactory.normalize_title(part_title_field.text)
-
-    @staticmethod
-    def get_all_varying_titles(bib: etree.Element) -> Optional[List[str]]:
-        """get_all_varying_titles(bib: etree.Element) -> Optional[List[str]]
-        Get all varying titles from 246 fields
-
-        :param bib: :class:`etree.Element`
-
-        :return: list of varying titles or None if not found
-        """
-        fields = bib.findall('.//datafield[@tag="246"]')
-
         titles = []
-        for field in fields:
-            title = ''
-            subf_a = field.find('subfield[@code="a"]')
-            if subf_a is not None:
-                title += subf_a.text
-            subf_b = field.find('subfield[@code="b"]')
-            if subf_b is not None:
-                title += ' ' + subf_b.text
-            subf_p = field.find('subfield[@code="p"]')
-            if subf_p is not None:
-                title += ' ' + subf_p.text
-            if len(title) > 0:
-                titles.append(BriefRecFactory.normalize_title(title))
+        for tag in ['245', '246']:
+            fields = cls.findall(bib, tag)
+            for field in fields:
+                title = dict()
+                subf_bp = []
+
+                subfield_a = ''
+                subfields_bp = []
+                for subfield in field:
+                    if 'a' in subfield:
+                        subfield_a = subfield['a']
+                    elif 'b' in subfield:
+                        subfields_bp.append(subfield['b'])
+                    elif 'p' in subfield:
+                        subfields_bp.append(subfield['p'])
+
+                title['m'] = cls.normalize_title(subfield_a)
+
+                title['s'] = ': '.join(subf_bp) if len(subf_bp) > 0 else ''
+
+                titles.append(title)
 
         return titles
 
-    @staticmethod
-    def get_complete_titles(bib: etree.Element) -> Optional[List[str]]:
-        """
-        Get the complete titles of the record
 
-        :param bib: :class:`etree.Element`
-
-        :return: list of complete titles or None if not found
-
-        """
-        title245 = ' '.join([t for t in [BriefRecFactory.get_title(bib),
-                                         BriefRecFactory.get_subtitle(bib),
-                                         BriefRecFactory.get_part_title(bib)] if t is not None])
-
-        titles246 = BriefRecFactory.get_all_varying_titles(bib)
-        titles = [title245] + titles246
-        return titles if len(titles) > 0 else None
-
-    @staticmethod
-    def get_years(bib: etree.Element) -> Optional[Dict]:
+    @classmethod
+    def get_years(cls, bib: etree.Element) -> Optional[Dict]:
         """Get the dates of publication from 008 and 264$$c fields
 
         This function retrieves the publication years from the 008 control
@@ -324,24 +336,24 @@ class BriefRecFactory:
 
         :return: dictionary with keys 'year1' and optionally 'year2', or None if no year is found
         """
-        controlfield008 = bib.find('.//controlfield[@tag="008"]')
-        field_264c = bib.find('.//datafield[@tag="264"]/subfield[@code="c"]')
+        controlfield008 = cls.find(bib, '008')
+        field_264c = cls.find(bib, '264$$c')
 
         year1 = []
         year2 = None
 
         # Check source 1: 008
         if controlfield008 is not None:
-            year1_008 = BriefRecFactory.extract_year(controlfield008.text[7:11])
+            year1_008 = cls.extract_year(controlfield008[7:11])
             if year1_008 is not None:
                 year1.append(year1_008)
-            year2_008 = BriefRecFactory.extract_year(controlfield008.text[11:15])
+            year2_008 = cls.extract_year(controlfield008[11:15])
             if year2_008 is not None:
                 year2 = year2_008
 
         # Check source 2: 264$$c
         if field_264c is not None:
-            year1_264c = BriefRecFactory.extract_year(field_264c.text)
+            year1_264c = cls.extract_year(field_264c)
 
             if year1_264c is not None and year1_264c not in year1:
                 year1.append(year1_264c)
@@ -355,8 +367,8 @@ class BriefRecFactory:
         else:
             return {'y1': year1}
 
-    @staticmethod
-    def get_33x_summary(bib: etree.Element) -> Optional[str]:
+    @classmethod
+    def get_33x_summary(cls, bib: etree.Element) -> Optional[str]:
         """ get_33x_summary(bib: etree.Element) -> Optional[str]
         Get a summary of the 336, 337 and 338 fields
 
@@ -365,16 +377,16 @@ class BriefRecFactory:
         :return: summary of the 336, 337 and 338 fields"""
         s = ''
         for tag in ['336', '337', '338']:
-            fields = bib.findall(f'.//datafield[@tag="{tag}"]/subfield[@code="b"]')
+            fields = cls.findall(bib, f'{tag}$$b')
             if len(fields) > 0:
-                s += ','.join([f.text for f in fields]) + ';'
+                s += ','.join(fields) + ';'
             else:
                 s += ' ;'
         s = s[:-1]  # remove last ; character
         return s
 
-    @staticmethod
-    def get_bib_resource_type(bib: etree.Element) -> str:
+    @classmethod
+    def get_bib_resource_type(cls, bib: etree.Element) -> str:
         """Get the resource type of the record
 
         The analyse is mainly based on the leader position 6 and 7.
@@ -386,12 +398,12 @@ class BriefRecFactory:
         :return: resource type of the record
         """
 
-        pos6, pos7 = BriefRecFactory.get_leader_pos67(bib)
+        pos6, pos7 = cls.get_leader_pos67(bib)
         if pos6 in 'a':
             if pos7 in 'acdm':
                 return 'Book'
             elif pos7 in 'bis':
-                if BriefRecFactory.get_field_008(bib)[21] in 'pn':
+                if cls.find(bib, '008')[21] in 'pn':
                     return 'Journal'
                 else:
                     return 'Series'
@@ -425,23 +437,8 @@ class BriefRecFactory:
 
         return 'Book'
 
-    @staticmethod
-    def get_field_008(bib: etree.Element) -> Optional[str]:
-        """get_008_pos_form_item(bib: etree.Element) -> Optional[str]
-        Get the 008 field
-
-        :param bib: :class:`etree.Element`
-
-        :return: 008 field
-        """
-        controlfield008 = bib.find('.//controlfield[@tag="008"]')
-        if controlfield008 is None:
-            return None
-
-        return controlfield008.text
-
-    @staticmethod
-    def get_access_type(bib: etree.Element) -> Optional[str]:
+    @classmethod
+    def get_access_type(cls, bib: etree.Element) -> Optional[str]:
         """get_access_type(bib: etree.Element) -> Optional[str]
         Get the access type of the record
 
@@ -449,17 +446,17 @@ class BriefRecFactory:
 
         :return: access type of the record
         """
-        if BriefRecFactory.check_is_micro(bib) is True:
+        if cls.is_micro(bib) is True:
             return 'Microform'
-        if BriefRecFactory.check_is_online(bib) is True:
+        if cls.is_online(bib) is True:
             return 'Online'
-        if BriefRecFactory.check_is_braille(bib) is True:
+        if cls.is_braille(bib) is True:
             return 'Braille'
 
         return 'Physical'
 
-    @staticmethod
-    def get_format(bib: etree.Element) -> Dict:
+    @classmethod
+    def get_format(cls, bib: etree.Element) -> Dict:
         """get_format(bib: etree.Element) -> Optional[str]
         Get the format of the record from leader field position 6 and 7
 
@@ -467,15 +464,15 @@ class BriefRecFactory:
 
         :return: format of the record
         """
-        res_format = {'type': BriefRecFactory.get_bib_resource_type(bib),
-                      'access': BriefRecFactory.get_access_type(bib),
-                      'analytical': BriefRecFactory.check_is_analytical(bib),
-                      'f33x': BriefRecFactory.get_33x_summary(bib)}
+        res_format = {'type': cls.get_bib_resource_type(bib),
+                      'access': cls.get_access_type(bib),
+                      'analytical': cls.check_is_analytical(bib),
+                      'f33x': cls.get_33x_summary(bib)}
 
         return res_format
 
-    @staticmethod
-    def get_creators(bib: etree.Element) -> Optional[List[str]]:
+    @classmethod
+    def get_creators(cls, bib: etree.Element) -> Optional[List[str]]:
         """get_authors(bib: etree.Element) -> Option.al[List[str]]
         Get the list of authors from 100$a, 700$a
 
@@ -485,15 +482,14 @@ class BriefRecFactory:
         """
         fields = []
         for tag in ['100', '700']:
-            fields += bib.findall(f'.//datafield[@tag="{tag}"]/subfield[@code="a"]')
-        fields = [f.text for f in fields]
+            fields += cls.findall(bib, f'{tag}$$a')
         if len(fields) == 0:
             return None
         else:
             return list(set(fields))
 
-    @staticmethod
-    def get_corp_creators(bib: etree.Element) -> Optional[List[str]]:
+    @classmethod
+    def get_corp_creators(cls, bib: etree.Element) -> Optional[List[str]]:
         """get_authors(bib: etree.Element) -> Option.al[List[str]]
         Get the list of authors from 110$a, 111$a, 710$a and 711$a
 
@@ -503,45 +499,42 @@ class BriefRecFactory:
         """
         fields = []
         for tag in ['110', '111', '710', '711']:
-            fields += bib.findall(f'.//datafield[@tag="{tag}"]/subfield[@code="a"]')
-        fields = [f.text for f in fields]
+            fields += cls.findall(bib, f'{tag}$$a')
+
         if len(fields) == 0:
             return None
         else:
             return list(set(fields))
 
-    @staticmethod
-    def get_extent(bib: etree.Element) -> Optional[str]:
+    @classmethod
+    def get_extent(cls, bib: etree.Element) -> Optional[str]:
         """get_extent(bib: etree.Element)
         Return extent from field 300$a
 
         :param bib: :class:`etree.Element`
         :return: list of extent or None if not found
         """
-        extent_field = bib.find('.//datafield[@tag="300"]/subfield[@code="a"]')
-        extent = None
+        extent_field = cls.find(bib, '300$$a')
+
         if extent_field is not None:
-            extent = BriefRecFactory.normalize_extent(extent_field.text)
+            return cls.normalize_extent(extent_field)
 
-        return extent
+        return None
 
-    @staticmethod
-    def get_publishers(bib: etree.Element) -> Optional[List[str]]:
+    @classmethod
+    def get_publishers(cls, bib: etree.Element) -> Optional[List[str]]:
         """get_publishers(bib: etree.Element) -> Optional[List[str]]
         Return publishers from field 264$b
 
         :param bib: :class:`etree.Element`
         :return: list of publishers or None if not found
         """
-        publisher_fields = bib.findall('.//datafield[@tag="264"]/subfield[@code="b"]')
-        publishers = None
-        if len(publisher_fields) > 0:
-            publishers = [field.text for field in publisher_fields]
+        publishers = cls.findall(bib, '264$$b')
 
-        return publishers
+        return None if len(publishers) == 0 else publishers
 
-    @staticmethod
-    def get_series(bib: etree.Element) -> Optional[List[str]]:
+    @classmethod
+    def get_series(cls, bib: etree.Element) -> Optional[List[str]]:
         """get_series(bib: etree.Element) -> Optional[List[str]]
         Return series title from field 490$a
 
@@ -549,15 +542,15 @@ class BriefRecFactory:
 
         :return: list of titles of related series or None if not found
         """
-        series_fields = bib.findall('.//datafield[@tag="490"]/subfield[@code="a"]')
+        series_fields = cls.findall(bib,'490$$a')
         series = None
         if len(series_fields) > 0:
-            series = [BriefRecFactory.normalize_title(field.text) for field in series_fields]
+            series = [cls.normalize_title(field) for field in series_fields]
 
         return series
 
-    @staticmethod
-    def get_languages(bib: etree.Element) -> Optional[List[str]]:
+    @classmethod
+    def get_languages(cls, bib: etree.Element) -> Optional[List[str]]:
         """get_language(bib: etree.Element) -> Optional[str]
         Return language from field 008
 
@@ -565,21 +558,18 @@ class BriefRecFactory:
 
         :return: language or None if not found
         """
-        controlfield008 = bib.find('.//controlfield[@tag="008"]')
-        if controlfield008 is None:
-            return None
+        controlfield008 = cls.find(bib, '008')
 
-        languages = []
-        languages.append(controlfield008.text[35:38])
+        languages = [controlfield008[35:38]]
 
-        for field041 in bib.findall('.//datafield[@tag="041"]/subfield[@code="a"]'):
-            if field041.text not in languages:
-                languages.append(field041.text)
+        for field041 in cls.findall(bib, '041$$a'):
+            if field041 not in languages:
+                languages.append(field041)
 
         return languages
 
-    @staticmethod
-    def get_editions(bib: etree.Element) -> Optional[List[Dict]]:
+    @classmethod
+    def get_editions(cls, bib: etree.Element) -> Optional[List[Dict]]:
         """get_editions(bib: etree.Element) -> Optional[List[str]]
         Returns a list of editions (fields 250$a and 250$b)
 
@@ -587,18 +577,25 @@ class BriefRecFactory:
 
         :return: list of editions or None if not found
         """
-        edition_fields = bib.findall('.//datafield[@tag="250"]/subfield[@code="a"]')
+        edition_fields = cls.findall(bib, '250')
 
         if len(edition_fields) == 0:
             return None
 
         editions = []
         for edition_field in edition_fields:
-            subfield_b = edition_field.getparent().find('subfield[@code="b"]')
+            subfield_a = None
+            subfield_b = None
+            for subfield in edition_field:
+                if 'a' in subfield:
+                    subfield_a = subfield['a']
+                if 'b' in subfield:
+                    subfield_b = subfield['b']
+
             if subfield_b is not None:
-                editions.append(f'{edition_field.text} {subfield_b.text}')
+                editions.append(f'{subfield_a} {subfield_b}')
             else:
-                editions.append(edition_field.text)
+                editions.append(subfield_a)
 
         editions_complete = []
 
@@ -618,8 +615,8 @@ class BriefRecFactory:
         else:
             return editions_complete
 
-    @staticmethod
-    def get_parent(bib: etree.Element) -> Optional[Dict]:
+    @classmethod
+    def get_parent(cls, bib: etree.Element) -> Optional[Dict]:
         """get_parent(bib: etree.Element) -> Optional[List[str]]
         Return a dictionary with information found in field 773
 
@@ -635,48 +632,47 @@ class BriefRecFactory:
 
         :return: list of parent information or None if not found
         """
-        f773 = bib.find('.//datafield[@tag="773"]')
+        f773 = cls.find(bib, '773')
 
         # No 773 => no parent record
         if f773 is None:
             return None
 
         parent_information = dict()
-        for code in ['g', 't', 'x', 'z']:
-            for subfield in f773.findall(f'subfield[@code="{code}"]'):
-                if code == 't':
-                    parent_information['title'] = BriefRecFactory.normalize_title(subfield.text)
-                elif code == 'x':
-                    parent_information['std_num'] = BriefRecFactory.normalize_issn(subfield.text)
-                elif code == 'z':
-                    parent_information['std_num'] = BriefRecFactory.normalize_isbn(subfield.text)
-                elif code == 'g':
-                    txt = subfield.text
+        for subfield in f773:
+            if 't' in subfield:
+                parent_information['title'] = cls.normalize_title(subfield['t'])
+            elif 'x' in subfield:
+                parent_information['std_num'] = cls.normalize_issn(subfield['x'])
+            elif 'z' in subfield:
+                parent_information['std_num'] = cls.normalize_isbn(subfield['z'])
+            elif 'g' in subfield:
+                txt = subfield['g']
 
-                    # Get year information if available. In Alma year is prefixed with "yr:<year>"
-                    year = BriefRecFactory.extract_year(txt)
-                    if year is not None and (txt.startswith('yr:') is True or 'year' not in parent_information):
-                        # if year key is not populated, populate it with available data
-                        parent_information['year'] = year
+                # Get year information if available. In Alma year is prefixed with "yr:<year>"
+                year = cls.extract_year(txt)
+                if year is not None and (txt.startswith('yr:') is True or 'year' not in parent_information):
+                    # if year key is not populated, populate it with available data
+                    parent_information['year'] = year
 
-                    # Get number information. In Alma this information is prefixed with "nr:<number>"
-                    if txt.startswith('no:'):
-                        parent_information['number'] = txt[3:]
+                # Get number information. In Alma this information is prefixed with "nr:<number>"
+                if txt.startswith('no:'):
+                    parent_information['number'] = txt[3:]
 
-                    # No normalized parts in Alma format. Try to extract the longest list of numbers
-                    if not txt.startswith('yr:') and not txt.startswith('no:'):
-                        parts = BriefRecFactory.normalize_extent(txt)
-                        if 'parts' not in parent_information or len(parts) > len(parent_information['parts']):
-                            parent_information['parts'] = parts
+                # No normalized parts in Alma format. Try to extract the longest list of numbers
+                if not txt.startswith('yr:') and not txt.startswith('no:'):
+                    parts = cls.normalize_extent(txt)
+                    if 'parts' not in parent_information or len(parts) > len(parent_information['parts']):
+                        parent_information['parts'] = parts
 
         if len(parent_information) > 0:
             return parent_information
         else:
             return None
 
-    @staticmethod
-    def check_is_online(bib: etree.Element):
-        """check_is_online(bib:etree.Element)
+    @classmethod
+    def is_online(cls, bib: etree.Element) -> bool:
+        """
         Check if the record is an online record.
 
         Use field 008 and leader. Position 23 indicate if a record is online or not (values "o",
@@ -686,17 +682,18 @@ class BriefRecFactory:
 
         :return: boolean indicating whether the record is online
         """
-        leader6 = BriefRecFactory.get_leader_pos67(bib)[0]
-        f008 = bib.find('.//controlfield[@tag="008"]').text
-        format_pos = 29 if leader6 in ['e', 'g', 'k', 'o', 'r'] else 23
-        f338b = bib.find('.//datafield[@tag="338"]/subfield[@code="b"]')
-        if f338b is not None and f338b.text == 'cr':
+        f338b = cls.find(bib, '338$$b')
+        if f338b is not None and f338b == 'cr':
             return True
 
-        return f008[format_pos] in ['o', 'q', 's']
+        leader6 = cls.get_leader_pos67(bib)[0]
+        f008 = cls.find(bib,'008')
+        format_pos = 29 if leader6 in 'egkor' else 23
 
-    @staticmethod
-    def check_is_micro(bib: etree.Element):
+        return f008[format_pos] in 'oqs'
+
+    @classmethod
+    def is_micro(cls, bib: etree.Element):
         """Check if the record is a microform.
 
         Use field 008 and leader. Position 23 indicate if a record is online or not (values "a",
@@ -706,17 +703,17 @@ class BriefRecFactory:
 
         :return: boolean indicating whether the record is a micro form
         """
-        leader6 = BriefRecFactory.get_leader_pos67(bib)[0]
-        f008 = bib.find('.//controlfield[@tag="008"]').text
-        format_pos = 29 if leader6 in ['e', 'g', 'k', 'o', 'r'] else 23
-        f338b = bib.find('.//datafield[@tag="338"]/subfield[@code="b"]')
-        if f338b is not None and f338b.text.startswith('h') is True:
+        leader6 = cls.get_leader_pos67(bib)[0]
+        f008 = cls.find(bib,'008')
+        format_pos = 29 if leader6 in 'egkor' else 23
+        f338b = cls.find(bib,'338$$b')
+        if f338b is not None and f338b.startswith('h') is True:
             return True
 
-        return f008[format_pos] in ['a', 'b', 'c']
+        return f008[format_pos] in 'abc'
 
-    @staticmethod
-    def check_is_braille(bib: etree.Element):
+    @classmethod
+    def is_braille(cls, bib: etree.Element):
         """Check if the record is a Braille document.
 
         Use field 008 and leader. Position 23 indicate if a record is a Braille document or not
@@ -726,18 +723,18 @@ class BriefRecFactory:
 
         :return: boolean indicating whether the record is a micro form
         """
-        leader6 = BriefRecFactory.get_leader_pos67(bib)[0]
-        f008 = bib.find('.//controlfield[@tag="008"]').text
-        format_pos = 29 if leader6 in ['e', 'g', 'k', 'o', 'r'] else 23
-        f336b = bib.find('.//datafield[@tag="336"]/subfield[@code="b"]')
+        leader6 = cls.get_leader_pos67(bib)[0]
+        f008 = cls.find(bib,'008')
+        format_pos = 29 if leader6 in 'egkor' else 23
+        f336b = cls.find(bib,'336$$b')
 
-        if f336b is not None and f336b.text == 'tct':
+        if f336b is not None and f336b == 'tct':
             return True
 
         return f008[format_pos] in 'f'
 
-    @staticmethod
-    def check_is_analytical(bib: etree.Element):
+    @classmethod
+    def check_is_analytical(cls, bib: etree.Element):
         """Check if the record is an analytical record.
 
         Leader position 7 indicates if a record is an analytical record.
@@ -746,31 +743,31 @@ class BriefRecFactory:
 
         :return: boolean indicating whether the record is an analytical record
         """
-        leader7 = BriefRecFactory.get_leader_pos67(bib)[1]
+        leader7 = cls.get_leader_pos67(bib)[1]
 
         return leader7 == 'a'
 
-    @staticmethod
-    def get_bib_info(bib: etree.Element):
+    @classmethod
+    def get_bib_info(cls, bib: etree.Element):
         """get_bib_info(bib: etree.Element)
         Return a json object with the brief record information
 
         :param bib: :class:`etree.Element`
         :return: json object with brief record information
         """
-        bib_info = {'rec_id': BriefRecFactory.get_rec_id(bib),
-                    'format': BriefRecFactory.get_format(bib),
-                    'titles': BriefRecFactory.get_complete_titles(bib),
-                    'short_title': BriefRecFactory.get_title(bib),
-                    'creators': BriefRecFactory.get_creators(bib),
-                    'corp_creators': BriefRecFactory.get_corp_creators(bib),
-                    'languages': BriefRecFactory.get_languages(bib),
-                    'extent': BriefRecFactory.get_extent(bib),
-                    'editions': BriefRecFactory.get_editions(bib),
-                    'years': BriefRecFactory.get_years(bib),
-                    'publishers': BriefRecFactory.get_publishers(bib),
-                    'series': BriefRecFactory.get_series(bib),
-                    'parent': BriefRecFactory.get_parent(bib),
-                    'std_nums': BriefRecFactory.get_std_num(bib),
-                    'sys_nums': BriefRecFactory.get_sys_nums(bib)}
+        bib_info = {'rec_id': cls.get_rec_id(bib),
+                    'format': cls.get_format(bib),
+                    'titles': cls.get_titles(bib),
+                    'short_titles': [title['m'] for title in cls.get_titles(bib)],
+                    'creators': cls.get_creators(bib),
+                    'corp_creators': cls.get_corp_creators(bib),
+                    'languages': cls.get_languages(bib),
+                    'extent': cls.get_extent(bib),
+                    'editions': cls.get_editions(bib),
+                    'years': cls.get_years(bib),
+                    'publishers': cls.get_publishers(bib),
+                    'series': cls.get_series(bib),
+                    'parent': cls.get_parent(bib),
+                    'std_nums': cls.get_std_num(bib),
+                    'sys_nums': cls.get_sys_nums(bib)}
         return bib_info

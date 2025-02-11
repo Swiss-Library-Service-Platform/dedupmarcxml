@@ -7,7 +7,7 @@ different submodules to evaluate different fields.
 # from dedupmarcxml.score. import score_publishers, score_editions, score_extent, score_names
 from dedupmarcxml import score as scorelib
 from dedupmarcxml import tools
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Literal
 from dedupmarcxml.briefrecord import BriefRec, BriefRecFactory
 import numpy as np
 from copy import deepcopy
@@ -59,7 +59,27 @@ def evaluate_format(format1: Dict, format2: Dict) -> float:
 
 @tools.handle_values_lists
 @tools.handle_missing_values()
-def evaluate_titles(title1: str, title2: str) -> float:
+def evaluate_titles(title1: Dict[Literal['m']: str, Literal['s']: str],
+                    title2: Dict[Literal['m']: str, Literal['s']: str]) -> float:
+    """Evaluate similarity of short titles
+
+    :param title1: string containing short title of the first record
+    :param title2: string containing short title of the second record
+
+    :return: float with matching score
+    """
+    norm_title1 = tools.to_ascii(' '.join([title1['m'], title1['s']]))
+    norm_title2 = tools.to_ascii(' '.join([title2['m'], title2['s']]))
+
+    norm_title1 = tools.remove_special_chars(norm_title1)
+    norm_title2 = tools.remove_special_chars(norm_title2)
+
+    return tools.evaluate_text_similarity(norm_title1, norm_title2)
+
+
+@tools.handle_values_lists
+@tools.handle_missing_values(key='m')
+def evaluate_short_titles(title1: str, title2: str) -> float:
     """Evaluate similarity of short titles
 
     :param title1: string containing short title of the first record
@@ -334,7 +354,7 @@ def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec) -> Dict[str, flo
     score_title = evaluate_titles(rec1.data['titles'], rec2.data['titles'])
 
     # We evaluate the similarity of the short titles
-    score_short_title = evaluate_titles(rec1.data['short_title'], rec2.data['short_title'])
+    score_short_title = evaluate_short_titles(rec1.data['short_titles'], rec2.data['short_titles'])
 
     # We evaluate the similarity of the creators
     score_creators = evaluate_creators(rec1.data['creators'], rec2.data['creators'])
@@ -358,7 +378,7 @@ def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec) -> Dict[str, flo
     score_yr = evaluate_years_start_and_end(rec1.data['years'], rec2.data['years'])
 
     # We evaluate the similarity of the series
-    score_series = evaluate_titles(rec1.data['series'], rec2.data['series'])
+    score_series = evaluate_short_titles(rec1.data['series'], rec2.data['series'])
 
     # We evaluate the similarity of the parent
     score_parent = evaluate_parent(rec1.data['parent'], rec2.data['parent'])

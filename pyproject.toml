@@ -1,14 +1,15 @@
 [project]
-name = "almasru"
-version = "2.2.15"
+name = "dedupmarcxml"
+version = "0.1.5"
 authors = [
   { name="Raphaël Rey", email="raphael.rey@slsp.ch" },
 ]
-description = "This python module is a tool to use Alma SRU. it manages the logs and the backup of the records."
+description = "This python module is a tool to dedup MarcXML records."
 readme = "readme.rst"
-requires-python = ">=3"
+requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
 ]
 
@@ -17,7 +18,10 @@ dependencies = ["lxml",
                 "Levenshtein"]
 
 [tool.setuptools.packages.find]
-include = ["dedupmarcxml", "dedupmarcxml.*"]
+include = ["dedupmarcxml", "dedupmarcxml.*", "dedupmarcxml.data", "dedupmarcxml.data.*"]
+
+[tool.setuptools.package-data]
+"dedupmarcxml.data" = ["**.pickle"]
 
 [project.urls]
 "Homepage" = "https://github.com/Swiss-Library-Service-Platform/dedupmarcxml"

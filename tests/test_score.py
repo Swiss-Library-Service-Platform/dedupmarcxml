@@ -81,20 +81,20 @@ class TestScore(unittest.TestCase):
         self.assertTrue(score4 < 0.3)
 
     def test_evaluate_titles(self):
-        score1 = evaluate_titles('Mozrt', 'Mozart')
+        score1 = evaluate_short_titles('Mozrt', 'Mozart')
         self.assertTrue(score1 > 0.9)
 
-        score2 = evaluate_titles('Mozart, un compositeur de génie', 'Mozart, un compositeur')
+        score2 = evaluate_short_titles('Mozart, un compositeur de génie', 'Mozart, un compositeur')
         self.assertTrue(0.8 < score2 < 0.95, f'0.8 < {score2} < 0.95')
 
-        score3 = evaluate_titles('Mozart', 'Beethoven')
+        score3 = evaluate_short_titles('Mozart', 'Beethoven')
         self.assertTrue(score3 < 0.5)
 
-        score4 = evaluate_titles('Magnifique livre: il adore la Montagne', 'Il adore la Montagne')
+        score4 = evaluate_short_titles('Magnifique livre: il adore la Montagne', 'Il adore la Montagne')
         self.assertTrue(score4 > 0.8)
 
-        score4 = evaluate_titles(['Ein zwei drei', 'Un deux trois'],
-                                 ['Vier fün sechs', 'Un deux trois'])
+        score4 = evaluate_short_titles(['Ein zwei drei', 'Un deux trois'],
+                                       ['Vier fün sechs', 'Un deux trois'])
         self.assertTrue(score4 > 0.9)
 
 

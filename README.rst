@@ -6,7 +6,6 @@ This python module is a tool to deduplicate records in format MarcXML.
 
 * Author: Raphaël Rey (raphael.rey@slsp.ch)
 * Year: 2025
-* Version: 0.1
 * License: GNU General Public License v3.0
 * `Documentation <https://dedupmarcxml.readthedocs.io/en/latest/>`_
 
