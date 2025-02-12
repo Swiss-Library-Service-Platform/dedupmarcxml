@@ -187,6 +187,8 @@ def evaluate_publishers_vect(pub1, pub2):
     dot_product = np.dot(vect1, vect2)
 
     # Normalization using the product of the norms
+    if norm_vect1 * norm_vect2 == 0:
+        return 0
     cos_theta = dot_product / (norm_vect1 * norm_vect2)
 
     # Be sure to have correct interval data

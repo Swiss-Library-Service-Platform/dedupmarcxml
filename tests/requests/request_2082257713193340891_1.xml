@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+  <version>1.2</version>
+  <numberOfRecords>1</numberOfRecords>
+  <records>
+    <record>
+      <recordSchema>marcxml</recordSchema>
+      <recordPacking>xml</recordPacking>
+      <recordData>
+        <record xmlns="http://www.loc.gov/MARC21/slim">
+          <leader>00779nam a2200205uc 4500</leader>
+          <controlfield tag="001">991171276160305501</controlfield>
+          <controlfield tag="005">20231127085841.0</controlfield>
+          <controlfield tag="008">060103s1981    sz            00    ger^^</controlfield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(ABN)000267102ABN01</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(OCoLC)887336393</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="040">
+            <subfield code="a">CH-ZuSLS ABN AKB</subfield>
+            <subfield code="b">ger</subfield>
+            <subfield code="e">kids</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="100">
+            <subfield code="a">Burger, Hermann</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="0" tag="245">
+            <subfield code="a">Versuch über den Dichter Paul Haller</subfield>
+            <subfield code="c">Hermann Burger. Zeichnungen zu den Landschaften Paul Hallers / Werner Sommer</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="1" tag="264">
+            <subfield code="a">[Schweiz]</subfield>
+            <subfield code="b">[Verlag nicht ermittelbar]</subfield>
+            <subfield code="c">[1981]</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="300">
+            <subfield code="a">S. 125-145</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="336">
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="337">
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="338">
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="700">
+            <subfield code="a">Sommer, Werner</subfield>
+            <subfield code="t">Zeichnungen zu den Landschaften Paul Hallers</subfield>
+          </datafield>
+          <datafield ind1="0" ind2=" " tag="773">
+            <subfield code="t">Brugger Neujahrsblätter</subfield>
+            <subfield code="g">Jg. 91(1981)</subfield>
+            <subfield code="q">91/1981</subfield>
+            <subfield code="w">991171254061405501</subfield>
+            <subfield code="g">yr:1981</subfield>
+            <subfield code="g">no:91</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_ABN</subfield>
+            <subfield code="6">990002671020108281</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+        </record>
+      </recordData>
+      <recordIdentifier>991171276160305501</recordIdentifier>
+      <recordPosition>1</recordPosition>
+    </record>
+  </records>
+  <extraResponseData xmlns:xb="http://www.exlibris.com/repository/search/xmlbeans/">
+    <xb:exact>true</xb:exact>
+    <xb:responseDate>2025-02-12T01:55:42+0100</xb:responseDate>
+  </extraResponseData>
+</searchRetrieveResponse>

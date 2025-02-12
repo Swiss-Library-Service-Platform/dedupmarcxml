@@ -1,7 +1,10 @@
 import unittest
 
 from dedupmarcxml.evaluate import *
+from dedupmarcxml.briefrecord import XmlBriefRec, JsonBriefRec
 from almasru.client import SruClient, SruRecord, SruRequest
+import pickle
+import os
 
 
 SruClient.set_base_url('https://swisscovery.slsp.ch/view/sru/41SLSP_NETWORK')
@@ -145,10 +148,11 @@ class TestScore(unittest.TestCase):
         mms_id = '991036265429705501'
 
         rec = SruRecord(mms_id)
-        rec = BriefRec(rec.data)
+        rec = XmlBriefRec(rec.data)
 
         sim_score = evaluate_records_similarity(rec, rec)
-        self.assertGreater(sim_score['sys_nums'], 0.99)
+        score = get_similarity_score(sim_score)
+        self.assertGreater(score, 0.99)
         self.assertLess(sim_score['std_nums'], 0.01)
 
         score = get_similarity_score(sim_score)
@@ -158,15 +162,30 @@ class TestScore(unittest.TestCase):
         mms_id1 = '991036265429705501'
         mms_id2 = '991057213849705501'
         rec1 = SruRecord(mms_id1)
-        rec1 = BriefRec(rec1.data)
+        rec1 = XmlBriefRec(rec1.data)
         rec2 = SruRecord(mms_id2)
-        rec2 = BriefRec(rec2.data)
+        rec2 = XmlBriefRec(rec2.data)
         sim_score = evaluate_records_similarity(rec1, rec2)
+
         self.assertTrue(0.5 < sim_score['title'] < 0.7, f'0.5 < {sim_score["title"]} < 0.7')
         self.assertTrue(0.1 < sim_score['parent'] < 0.4, f'0.1 < {sim_score["parent"]} < 0.4')
 
         score = get_similarity_score(sim_score)
         self.assertTrue(0.4 < score < 0.6, f'0.3 < {score} < 0.5')
+
+    def test_evaluate_records_similarity_3(self):
+        mms_id = '991171276160305501' # same mms_id
+
+        with open('data_for_testing/record3.pkl' if os.getcwd().endswith('tests') else 'tests/data_for_testing/record3.pkl', 'rb') as f:
+            data = pickle.load(f)
+        rec1 = JsonBriefRec(data)
+        rec2 = SruRecord(mms_id)
+        rec2 = XmlBriefRec(rec2.data)
+
+        sim_score = evaluate_records_similarity(rec1, rec2)
+        score = get_similarity_score(sim_score)
+
+        self.assertTrue(0.9 < score <= 1, f'0.9 < {score} <= 1')
 
 
 if __name__ == '__main__':

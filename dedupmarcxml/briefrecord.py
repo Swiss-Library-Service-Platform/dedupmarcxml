@@ -4,9 +4,10 @@ import re
 import logging
 import json
 from dedupmarcxml import tools
+from abc import ABC, abstractmethod
 
 
-class BriefRec:
+class BriefRec(ABC):
     """Class representing a brief record object
 
     You can create a brief record object from a :class:`SruRecord` object or
@@ -17,26 +18,14 @@ class BriefRec:
     :ivar error: boolean, is True in case of error
     :ivar error_messages: list of string with the error messages
     :ivar data: json object with brief record information
-    :ivar src_data: XML data of the record
-
     """
 
-    def __init__(self, rec: etree.Element) -> None:
+    def __init__(self) -> None:
         """Brief record object
-
-        :param rec: XML data of the record or :class:`SruRecord` object
         """
         self.error = False
         self.error_messages = []
         self.data = None
-
-        if rec.__class__.__name__ == '_Element':
-            self.src_data = tools.remove_ns(rec)
-            self.data = self._get_bib_info()
-        else:
-            self.error = True
-            self.error_messages.append(f'Wrong type of data provided: {type(rec)}')
-            logging.error(f'BriefRec: wrong type of data provided: {type(rec)}')
 
     def __str__(self) -> str:
         if self.data is not None:
@@ -56,83 +45,84 @@ class BriefRec:
     def __eq__(self, other) -> bool:
         return self.data['rec_id'] == other.data['rec_id']
 
-    # @check_error
+    @abstractmethod
+    def _get_bib_info(self) -> Dict:
+        pass
+
+
+class XmlBriefRec(BriefRec):
+    def __init__(self, rec: etree.Element) -> None:
+        """Brief record object
+
+        :param rec: XML data of the record or :class:`SruRecord` object
+        """
+        super().__init__()
+
+        if rec.__class__.__name__ == '_Element':
+            self.src_data = tools.remove_ns(rec)
+            self.data = self._get_bib_info()
+        else:
+            self.error = True
+            self.error_messages.append(f'Wrong type of data provided: {type(rec)}')
+            logging.error(f'BriefRec: wrong type of data provided: {type(rec)}')
+
     def _get_bib_info(self):
-        bib_info = BriefRecFactory.get_bib_info(self.src_data)
-        return bib_info
+        return XmlBriefRecFactory.get_bib_info(self.src_data)
 
 
-class BriefRecFactory:
-    """Class to create a brief record from a MARCXML record
+class JsonBriefRec(BriefRec):
+    def __init__(self, rec: Dict) -> None:
+        """Brief record object
 
-    The class can parse several fields of the MARCXML record. It can also
-    summarize the result in a json object.
+        :param rec: XML data of the record or :class:`SruRecord` object
+        """
+        super().__init__()
+
+        if rec.__class__.__name__ == 'dict':
+            self.src_data = rec
+            self.data = self._get_bib_info()
+        else:
+            self.error = True
+            self.error_messages.append(f'Wrong type of data provided: {type(rec)}')
+            logging.error(f'BriefRec: wrong type of data provided: {type(rec)}')
+
+    def _get_bib_info(self):
+        return JsonBriefRecFactory.get_bib_info(self.src_data)
+
+
+class BriefRecFactory(ABC):
+    """Class to create a brief record from a Marc21 record
+
+    The class can parse several fields of the Marc21 record.
+
+    :cvar bib_type: :class:`etree.Element` or :class:`Dict`
     """
 
+    bib_type = Union[etree.Element, Dict]
+
     @classmethod
-    def find(cls, bib: etree.Element, path:str) -> Optional[Union[str,List[Dict]]]:
+    @abstractmethod
+    def find(cls, bib: bib_type, path:str) -> Optional[Union[str,List[Dict]]]:
         """Find a value in the MARCXML record
 
-        :param bib: MARCXML record
+        :param bib: Marc21 record
         :param path: path to the value to find
 
         :return: value found or None if not found
         """
-        path = path.split('$$')
-        path_xml = ''
-
-        if path[0] == 'leader':
-            path_xml = './/leader'
-
-        elif path[0].startswith('00'):
-            path_xml = f'.//controlfield[@tag="{path[0]}"]'
-
-        elif len(path) == 2:
-            path_xml = f'.//datafield[@tag="{path[0]}"]/subfield[@code="{path[1]}"]'
-
-        elif len(path) == 1:
-            path_xml = f'.//datafield[@tag="{path[0]}"]'
-            result = bib.find(path_xml)
-            if result is None:
-                return None
-
-            subfields = [{subfield.get('code'): subfield.text} for subfield in result]
-            return None if len(subfields) == 0 else subfields
-
-        result = bib.find(path_xml)
-
-        return result.text if result is not None else None
-
+        pass
 
     @classmethod
-    def findall(cls, bib: etree.Element, path:str) -> List[Union[str, List[Dict]]]:
+    @abstractmethod
+    def findall(cls, bib: bib_type, path:str) -> List[Union[str, List[Dict[str,str]]]]:
         """Find a value in the MARCXML record
 
-        :param bib: MARCXML record
+        :param bib: Marc21 record
         :param path: path to the value to find
 
         :return: value found or None if not found
         """
-        path = path.split('$$')
-
-        if len(path) == 2:
-            path_xml = f'.//datafield[@tag="{path[0]}"]/subfield[@code="{path[1]}"]'
-
-            results = bib.findall(path_xml)
-
-            return [result.text for result in results] if len(results) > 0 else []
-
-        elif len(path) == 1:
-            # Transform the data to json
-            path_xml = f'.//datafield[@tag="{path[0]}"]'
-
-            results = bib.findall(path_xml)
-            fields = []
-            for result in results:
-                fields.append([{subfield.get('code'): subfield.text} for subfield in result])
-            return fields
-
-        return []
+        pass
 
     @classmethod
     def normalize_title(cls, title: str) -> str:
@@ -204,7 +194,7 @@ class BriefRecFactory:
             return int(m.group())
 
     @classmethod
-    def get_rec_id(cls, bib: etree.Element) -> Optional[str]:
+    def get_rec_id(cls, bib: bib_type) -> Optional[str]:
         """
         Get the record ID
 
@@ -215,7 +205,7 @@ class BriefRecFactory:
         return cls.find(bib, '001')
 
     @classmethod
-    def get_std_num(cls, bib: etree.Element) -> Optional[List[str]]:
+    def get_std_num(cls, bib: bib_type) -> Optional[List[str]]:
         """
         Get a list of standardized numbers like DOI
 
@@ -254,7 +244,7 @@ class BriefRecFactory:
         return list(set.union(isbns, issns, std_nums, pub_nums))
 
     @classmethod
-    def get_leader_pos67(cls, bib: etree.Element) -> Optional[str]:
+    def get_leader_pos67(cls, bib: bib_type) -> Optional[str]:
         """
         Get the leader position 6 and 7
 
@@ -270,7 +260,7 @@ class BriefRecFactory:
             return leader[6:8]
 
     @classmethod
-    def get_sys_nums(cls, bib: etree.Element) -> Optional[List[str]]:
+    def get_sys_nums(cls, bib: bib_type) -> Optional[List[str]]:
         """
         Get a set of system numbers
 
@@ -286,7 +276,7 @@ class BriefRecFactory:
         return list(sys_nums)
 
     @classmethod
-    def get_titles(cls, bib: etree.Element) -> List[Dict[Literal['m']: str, Literal['s']: str]]:
+    def get_titles(cls, bib: bib_type) -> List[Dict[Literal['m']: str, Literal['s']: str]]:
         """
         Get all titles of the record.
 
@@ -303,7 +293,6 @@ class BriefRecFactory:
             fields = cls.findall(bib, tag)
             for field in fields:
                 title = dict()
-                subf_bp = []
 
                 subfield_a = ''
                 subfields_bp = []
@@ -317,7 +306,7 @@ class BriefRecFactory:
 
                 title['m'] = cls.normalize_title(subfield_a)
 
-                title['s'] = ': '.join(subf_bp) if len(subf_bp) > 0 else ''
+                title['s'] = ': '.join(subfields_bp) if len(subfields_bp) > 0 else ''
 
                 titles.append(title)
 
@@ -325,7 +314,7 @@ class BriefRecFactory:
 
 
     @classmethod
-    def get_years(cls, bib: etree.Element) -> Optional[Dict]:
+    def get_years(cls, bib: bib_type) -> Optional[Dict]:
         """Get the dates of publication from 008 and 264$$c fields
 
         This function retrieves the publication years from the 008 control
@@ -368,7 +357,7 @@ class BriefRecFactory:
             return {'y1': year1}
 
     @classmethod
-    def get_33x_summary(cls, bib: etree.Element) -> Optional[str]:
+    def get_33x_summary(cls, bib: bib_type) -> Optional[str]:
         """ get_33x_summary(bib: etree.Element) -> Optional[str]
         Get a summary of the 336, 337 and 338 fields
 
@@ -386,7 +375,7 @@ class BriefRecFactory:
         return s
 
     @classmethod
-    def get_bib_resource_type(cls, bib: etree.Element) -> str:
+    def get_bib_resource_type(cls, bib: bib_type) -> str:
         """Get the resource type of the record
 
         The analyse is mainly based on the leader position 6 and 7.
@@ -438,7 +427,7 @@ class BriefRecFactory:
         return 'Book'
 
     @classmethod
-    def get_access_type(cls, bib: etree.Element) -> Optional[str]:
+    def get_access_type(cls, bib: bib_type) -> Optional[str]:
         """get_access_type(bib: etree.Element) -> Optional[str]
         Get the access type of the record
 
@@ -456,7 +445,7 @@ class BriefRecFactory:
         return 'Physical'
 
     @classmethod
-    def get_format(cls, bib: etree.Element) -> Dict:
+    def get_format(cls, bib: bib_type) -> Dict:
         """get_format(bib: etree.Element) -> Optional[str]
         Get the format of the record from leader field position 6 and 7
 
@@ -472,7 +461,7 @@ class BriefRecFactory:
         return res_format
 
     @classmethod
-    def get_creators(cls, bib: etree.Element) -> Optional[List[str]]:
+    def get_creators(cls, bib: bib_type) -> Optional[List[str]]:
         """get_authors(bib: etree.Element) -> Option.al[List[str]]
         Get the list of authors from 100$a, 700$a
 
@@ -486,10 +475,15 @@ class BriefRecFactory:
         if len(fields) == 0:
             return None
         else:
-            return list(set(fields))
+            unique_list = []
+            for field in fields:
+                if field not in unique_list:
+                    unique_list.append(field)
+
+            return unique_list
 
     @classmethod
-    def get_corp_creators(cls, bib: etree.Element) -> Optional[List[str]]:
+    def get_corp_creators(cls, bib: bib_type) -> Optional[List[str]]:
         """get_authors(bib: etree.Element) -> Option.al[List[str]]
         Get the list of authors from 110$a, 111$a, 710$a and 711$a
 
@@ -504,10 +498,15 @@ class BriefRecFactory:
         if len(fields) == 0:
             return None
         else:
-            return list(set(fields))
+            unique_list = []
+            for field in fields:
+                if field not in unique_list:
+                    unique_list.append(field)
+
+            return unique_list
 
     @classmethod
-    def get_extent(cls, bib: etree.Element) -> Optional[str]:
+    def get_extent(cls, bib: bib_type) -> Optional[str]:
         """get_extent(bib: etree.Element)
         Return extent from field 300$a
 
@@ -522,7 +521,7 @@ class BriefRecFactory:
         return None
 
     @classmethod
-    def get_publishers(cls, bib: etree.Element) -> Optional[List[str]]:
+    def get_publishers(cls, bib: bib_type) -> Optional[List[str]]:
         """get_publishers(bib: etree.Element) -> Optional[List[str]]
         Return publishers from field 264$b
 
@@ -534,7 +533,7 @@ class BriefRecFactory:
         return None if len(publishers) == 0 else publishers
 
     @classmethod
-    def get_series(cls, bib: etree.Element) -> Optional[List[str]]:
+    def get_series(cls, bib: bib_type) -> Optional[List[str]]:
         """get_series(bib: etree.Element) -> Optional[List[str]]
         Return series title from field 490$a
 
@@ -550,7 +549,7 @@ class BriefRecFactory:
         return series
 
     @classmethod
-    def get_languages(cls, bib: etree.Element) -> Optional[List[str]]:
+    def get_languages(cls, bib: bib_type) -> Optional[List[str]]:
         """get_language(bib: etree.Element) -> Optional[str]
         Return language from field 008
 
@@ -569,7 +568,7 @@ class BriefRecFactory:
         return languages
 
     @classmethod
-    def get_editions(cls, bib: etree.Element) -> Optional[List[Dict]]:
+    def get_editions(cls, bib: bib_type) -> Optional[List[Dict]]:
         """get_editions(bib: etree.Element) -> Optional[List[str]]
         Returns a list of editions (fields 250$a and 250$b)
 
@@ -616,7 +615,7 @@ class BriefRecFactory:
             return editions_complete
 
     @classmethod
-    def get_parent(cls, bib: etree.Element) -> Optional[Dict]:
+    def get_parent(cls, bib: bib_type) -> Optional[Dict]:
         """get_parent(bib: etree.Element) -> Optional[List[str]]
         Return a dictionary with information found in field 773
 
@@ -671,7 +670,7 @@ class BriefRecFactory:
             return None
 
     @classmethod
-    def is_online(cls, bib: etree.Element) -> bool:
+    def is_online(cls, bib: bib_type) -> bool:
         """
         Check if the record is an online record.
 
@@ -693,7 +692,7 @@ class BriefRecFactory:
         return f008[format_pos] in 'oqs'
 
     @classmethod
-    def is_micro(cls, bib: etree.Element):
+    def is_micro(cls, bib: bib_type):
         """Check if the record is a microform.
 
         Use field 008 and leader. Position 23 indicate if a record is online or not (values "a",
@@ -713,7 +712,7 @@ class BriefRecFactory:
         return f008[format_pos] in 'abc'
 
     @classmethod
-    def is_braille(cls, bib: etree.Element):
+    def is_braille(cls, bib: bib_type):
         """Check if the record is a Braille document.
 
         Use field 008 and leader. Position 23 indicate if a record is a Braille document or not
@@ -734,7 +733,7 @@ class BriefRecFactory:
         return f008[format_pos] in 'f'
 
     @classmethod
-    def check_is_analytical(cls, bib: etree.Element):
+    def check_is_analytical(cls, bib: bib_type):
         """Check if the record is an analytical record.
 
         Leader position 7 indicates if a record is an analytical record.
@@ -748,7 +747,7 @@ class BriefRecFactory:
         return leader7 == 'a'
 
     @classmethod
-    def get_bib_info(cls, bib: etree.Element):
+    def get_bib_info(cls, bib: bib_type):
         """get_bib_info(bib: etree.Element)
         Return a json object with the brief record information
 
@@ -771,3 +770,149 @@ class BriefRecFactory:
                     'std_nums': cls.get_std_num(bib),
                     'sys_nums': cls.get_sys_nums(bib)}
         return bib_info
+
+class XmlBriefRecFactory(BriefRecFactory):
+    """Class representing a brief record object
+
+    This class heritates from :class:`BriefRec` and is used to create a brief record object
+    from a MARCXML record.
+
+    :cvar bib_type: :class:`etree.Element`
+
+    """
+    bib_type = etree.Element
+
+    @classmethod
+    def find(cls, bib: bib_type, path:str) -> Optional[Union[str,List[Dict]]]:
+        """Find a value in the MARCXML record
+
+        :param bib: Marc21 record
+        :param path: path to the value to find
+
+        :return: value found or None if not found
+        """
+        path = path.split('$$')
+        path_xml = ''
+
+        if path[0] == 'leader':
+            path_xml = './/leader'
+
+        elif path[0].startswith('00'):
+            path_xml = f'.//controlfield[@tag="{path[0]}"]'
+
+        elif len(path) == 2:
+            path_xml = f'.//datafield[@tag="{path[0]}"]/subfield[@code="{path[1]}"]'
+
+        elif len(path) == 1:
+            path_xml = f'.//datafield[@tag="{path[0]}"]'
+            result = bib.find(path_xml)
+            if result is None:
+                return None
+
+            subfields = [{subfield.get('code'): subfield.text} for subfield in result]
+            return None if len(subfields) == 0 else subfields
+
+        result = bib.find(path_xml)
+
+        return result.text if result is not None else None
+
+
+    @classmethod
+    def findall(cls, bib: bib_type, path:str) -> List[Union[str, List[Dict[str,str]]]]:
+        """Find a value in the MARCXML record
+
+        :param bib: Marc21 record
+        :param path: path to the value to find
+
+        :return: value found or None if not found
+        """
+        path = path.split('$$')
+
+        if len(path) == 2:
+            path_xml = f'.//datafield[@tag="{path[0]}"]/subfield[@code="{path[1]}"]'
+
+            results = bib.findall(path_xml)
+
+            return [result.text for result in results]
+
+        elif len(path) == 1:
+            # Transform the data to json
+            path_xml = f'.//datafield[@tag="{path[0]}"]'
+
+            results = bib.findall(path_xml)
+            fields = []
+            for result in results:
+                fields.append([{subfield.get('code'): subfield.text} for subfield in result])
+            return fields
+
+        return []
+
+
+class JsonBriefRecFactory(BriefRecFactory):
+    """Class to create a brief record from a MARCXML record
+
+    The class can parse several fields of the MARCXML record. It can also
+    summarize the result in a json object.
+
+    :cvar bib_type: :class:`Dict`
+    """
+
+    bib_type = Dict
+
+    @classmethod
+    def find(cls, bib: bib_type, path: str) -> Optional[Union[str, List[Dict]]]:
+        """Find a value in the MARCXML record
+
+        :param bib: Marc21 record
+        :param path: path to the value to find
+
+        :return: value found or None if not found
+        """
+        path = path.split('$$')
+
+        if path[0] == 'leader':
+            return bib['marc']['leader']
+
+        elif path[0].startswith('00'):
+            return bib['marc'].get(path[0])
+
+        elif len(path) == 2:
+            datafields = bib['marc'].get(path[0], [])
+
+            for datafield in datafields:
+                for subfield in datafield['sub']:
+                    if path[1] in subfield:
+                        return subfield[path[1]]
+
+        elif len(path) == 1:
+            datafields = bib['marc'].get(path[0])
+            if datafields is not None:
+                return datafields[0]['sub']
+
+        return None
+
+    @classmethod
+    def findall(cls, bib: bib_type, path: str) -> List[Union[str, List[Dict]]]:
+        """Find a value in the MARCXML record
+
+        :param bib: Marc21 record
+        :param path: path to the value to find
+
+        :return: value found or None if not found
+        """
+        path = path.split('$$')
+
+        if len(path) == 2:
+            values = []
+            datafields = bib['marc'].get(path[0], [])
+            for datafield in datafields:
+                for subfield in datafield['sub']:
+                    if path[1] in subfield:
+                        values.append(subfield[path[1]])
+            return values
+
+        elif len(path) == 1:
+            fields = bib['marc'].get(path[0], [])
+            return [field['sub'] for field in fields]
+
+        return []

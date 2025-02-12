@@ -372,7 +372,7 @@ def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec) -> Dict[str, flo
     score_ed = evaluate_editions(rec1.data['editions'], rec2.data['editions'])
 
     # We evaluate the similarity of the extent
-    score_ext = evaluate_years(rec1.data['extent'], rec2.data['extent'])
+    score_ext = evaluate_extent(rec1.data['extent'], rec2.data['extent'])
 
     # We evaluate the similarity of the years
     score_yr = evaluate_years_start_and_end(rec1.data['years'], rec2.data['years'])
