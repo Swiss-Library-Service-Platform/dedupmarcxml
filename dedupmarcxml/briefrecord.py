@@ -1,5 +1,5 @@
 from lxml import etree
-from typing import List, Optional, Dict, Literal, Union
+from typing import List, Optional, Dict, Union
 import re
 import logging
 import json
@@ -276,7 +276,7 @@ class BriefRecFactory(ABC):
         return list(sys_nums)
 
     @classmethod
-    def get_titles(cls, bib: bib_type) -> List[Dict[Literal['m']: str, Literal['s']: str]]:
+    def get_titles(cls, bib: bib_type) -> List[Dict]:
         """
         Get all titles of the record.
 
