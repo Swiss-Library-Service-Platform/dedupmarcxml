@@ -1,8 +1,8 @@
 [project]
 name = "dedupmarcxml"
-version = "0.1.8"
+version = "0.1.11"
 authors = [
-  { name="Raphaël Rey", email="raphael.rey@slsp.ch" },
+  {name="Raphaël Rey", email="raphael.rey@slsp.ch" },
 ]
 description = "This python module is a tool to dedup MarcXML records."
 readme = "readme.rst"

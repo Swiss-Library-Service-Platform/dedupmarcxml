@@ -59,8 +59,8 @@ def evaluate_format(format1: Dict, format2: Dict) -> float:
 
 @tools.handle_values_lists
 @tools.handle_missing_values()
-def evaluate_titles(title1: Dict[Literal['m']: str, Literal['s']: str],
-                    title2: Dict[Literal['m']: str, Literal['s']: str]) -> float:
+def evaluate_titles(title1: Dict,
+                    title2: Dict) -> float:
     """Evaluate similarity of short titles
 
     :param title1: string containing short title of the first record
