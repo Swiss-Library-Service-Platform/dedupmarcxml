@@ -74,14 +74,24 @@ def handle_missing_values(default_score: float = 0.2, key=None) -> Callable:
     return decorator
 
 
-def to_ascii(txt: str) -> str:
+def to_ascii(text: str) -> str:
     """Transform txt to ascii, remove special chars, make upper case
     
     :param txt: string to normalize
     
     :return: string with normalized text
     """
-    return unicodedata.normalize('NFKD', txt).upper().encode('ASCII', 'ignore').decode()
+    translation_table = str.maketrans({
+        'Ä': 'AE',
+        'Ö': 'OE',
+        'Ü': 'UE',
+    })
+
+    text_upper = text.upper()
+
+    converted_text = text_upper.translate(translation_table)
+
+    return unicodedata.normalize('NFKD', converted_text).encode('ASCII', 'ignore').decode()
 
 
 def remove_special_chars(txt: str, keep_dot: bool = False) -> str:
