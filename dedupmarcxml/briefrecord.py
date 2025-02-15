@@ -416,7 +416,7 @@ class BriefRecFactory(ABC):
             return 'Image'
 
         elif pos6 in 'ro':
-            return 'Objet'
+            return 'Object'
 
         elif pos6 in 'g':
             return 'Video'
