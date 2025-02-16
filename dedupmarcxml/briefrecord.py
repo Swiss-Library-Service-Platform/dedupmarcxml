@@ -424,7 +424,7 @@ class BriefRecFactory(ABC):
         elif pos6 in 'p':
             return 'Mixed Material'
 
-        return 'Book'
+        return 'Other'
 
     @classmethod
     def get_access_type(cls, bib: bib_type) -> Optional[str]:
