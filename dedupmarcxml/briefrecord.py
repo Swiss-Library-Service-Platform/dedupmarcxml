@@ -181,6 +181,20 @@ class BriefRecFactory(ABC):
             return m.group()
 
     @classmethod
+    def normalize_028(cls, num: str) -> Optional[str]:
+        """Suppress hyphen and textual information of the provided issn
+
+        :param num: raw string containing the vendor number
+
+        :return: string containing normalized issn
+        """
+        # Remove double spaces + spaces around special chars
+        num = re.sub(r'(?<=\W)\s|\s(?=\W)', '', num)
+        num = re.sub(r'\s+', ' ', num)
+        if len(num) > 0:
+            return num
+
+    @classmethod
     def extract_year(cls, txt: str) -> Optional[int]:
         """extract_year(str) -> Optional[int]
         Extract a substring of 4 digits
@@ -236,7 +250,13 @@ class BriefRecFactory(ABC):
         std_nums = set(cls.findall(bib, '024$$a'))
 
         # Get other publisher numbers
-        pub_nums = set(cls.findall(bib, '028$$a'))
+        raw_pub_nums = set(cls.findall(bib, '028$$a'))
+        pub_nums = set()
+
+        for pub_num in raw_pub_nums:
+            pub_num = cls.normalize_028(pub_num)
+            if pub_num is not None:
+                pub_nums.add(pub_num)
 
         if len(isbns) == 0 and len(issns) == 0 and len(std_nums) == 0 and pub_nums == 0:
             return None
@@ -378,7 +398,7 @@ class BriefRecFactory(ABC):
     def get_bib_resource_type(cls, bib: bib_type) -> str:
         """Get the resource type of the record
 
-        The analyse is mainly based on the leader position 6 and 7.
+        The analysis is mainly based on the leader position 6 and 7.
         To distinguish between series and journal, we use the field
         008 pos. 6.
 
