@@ -709,8 +709,9 @@ class BriefRecFactory(ABC):
         f008 = cls.find(bib,'008')
         format_pos = 29 if leader6 in 'egkor' else 23
 
-        if len(f008) >= format_pos:
+        if len(f008) > format_pos:
             return f008[format_pos] in 'oqs'
+        return False
 
     @classmethod
     def is_micro(cls, bib: bib_type):
@@ -729,8 +730,9 @@ class BriefRecFactory(ABC):
         f338b = cls.find(bib,'338$$b')
         if f338b is not None and f338b.startswith('h') is True:
             return True
-
-        return f008[format_pos] in 'abc'
+        if len(f008) > format_pos:
+            return f008[format_pos] in 'abc'
+        return False
 
     @classmethod
     def is_braille(cls, bib: bib_type):
@@ -751,7 +753,9 @@ class BriefRecFactory(ABC):
         if f336b is not None and f336b == 'tct':
             return True
 
-        return f008[format_pos] in 'f'
+        if len(f008) > format_pos:
+            return f008[format_pos] in 'f'
+        return False
 
     @classmethod
     def check_is_analytical(cls, bib: bib_type):
