@@ -709,7 +709,8 @@ class BriefRecFactory(ABC):
         f008 = cls.find(bib,'008')
         format_pos = 29 if leader6 in 'egkor' else 23
 
-        return f008[format_pos] in 'oqs'
+        if len(f008) >= format_pos:
+            return f008[format_pos] in 'oqs'
 
     @classmethod
     def is_micro(cls, bib: bib_type):
