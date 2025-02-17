@@ -3,7 +3,7 @@ import os
 from almasru.client import SruClient, SruRecord, SruRequest
 from almasru import config_log
 import unittest
-from dedupmarcxml import XmlBriefRec, JsonBriefRec
+from dedupmarcxml import XmlBriefRec, JsonBriefRec, XmlBriefRecFactory, JsonBriefRecFactory, RawBriefRec
 import pickle
 
 config_log()
@@ -105,3 +105,11 @@ class TestSruClient(unittest.TestCase):
         self.assertEqual(rec.data['parent']['parts']['nb'][1], 91)
         self.assertEqual(rec.data['languages'][0], 'ger')
         self.assertEqual(rec.data['creators'][1], 'Sommer, Werner')
+
+
+    def test_raw_brief_record_1(self):
+        with open('data_for_testing/record3.pkl' if os.getcwd().endswith('tests') else 'tests/data_for_testing/record3.pkl', 'rb') as f:
+            data = pickle.load(f)
+        rec1 = JsonBriefRec(data)
+        rec2 = RawBriefRec(rec1.data)
+        self.assertTrue(rec1.data['creators'][1] == rec2.data['creators'][1] == 'Sommer, Werner', f'{rec1.data["creators"][1]} != {rec2.data["creators"][1]}')

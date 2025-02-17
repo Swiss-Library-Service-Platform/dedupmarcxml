@@ -49,6 +49,36 @@ class BriefRec(ABC):
     def _get_bib_info(self) -> Dict:
         pass
 
+class RawBriefRec(BriefRec):
+    """Class representing a brief record object
+
+    You can create a brief record object from a :class:`SruRecord` object or
+    from the XML data of a MARCXML record using an Etree Element object.
+
+    The namespaces are removed from the XML data.
+
+    :ivar error: boolean, is True in case of error
+    :ivar error_messages: list of string with the error messages
+    :ivar data: json object with brief record information
+    """
+
+    def __init__(self, rec: Dict) -> None:
+        """Brief record object
+        """
+
+        super().__init__()
+
+        if rec.__class__.__name__ == 'dict':
+            self.data = rec
+            self.src_data = None
+
+        else:
+            self.error = True
+            self.error_messages.append(f'Wrong type of data provided: {type(rec)}')
+            logging.error(f'BriefRec: wrong type of data provided: {type(rec)}')
+
+    def _get_bib_info(self):
+        return self.data
 
 class XmlBriefRec(BriefRec):
     def __init__(self, rec: etree.Element) -> None:
