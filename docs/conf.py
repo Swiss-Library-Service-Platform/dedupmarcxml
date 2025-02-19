@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 project = 'dedupmarcxml'
 author = 'Raphaël Rey'
-version = "0.1.19"
+version = "0.1.20"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

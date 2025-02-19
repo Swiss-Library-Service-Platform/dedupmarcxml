@@ -69,7 +69,12 @@ class RawBriefRec(BriefRec):
         super().__init__()
 
         if rec.__class__.__name__ == 'dict':
-            self.data = rec
+            try:
+                self.data = {k: rec[k] for k in ['rec_id', 'format', 'titles', 'short_titles', 'creators', 'corp_creators', 'languages', 'extent', 'editions', 'years', 'publishers', 'series', 'parent', 'std_nums', 'sys_nums']}
+            except KeyError as e:
+                self.error = True
+                self.error_messages.append(f'Key not found in data: {str(e)}')
+                logging.error(f'BriefRec: key not found in data: {str(e)}')
             self.src_data = None
 
         else:
