@@ -238,7 +238,7 @@ def is_empty(value, key=None) -> bool:
         return True
     elif isinstance(value, list) and len(value) == 0:
         return True
-    elif isinstance(value, dict) and key is not None and key not in value:
+    elif isinstance(value, dict) and key is not None and (key not in value or is_empty(value[key])):
         return True
     elif isinstance(value, dict) and key is None and len(value) == 0:
         return True
