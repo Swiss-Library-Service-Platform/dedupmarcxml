@@ -390,8 +390,8 @@ def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec) -> Dict[str, flo
     score_sys_nums = evaluate_identifiers(rec1.data['sys_nums'], rec2.data['sys_nums'])
 
     return {'format': score_format,
-            'title': score_title,
-            'short_title': score_short_title,
+            'titles': score_title,
+            'short_titles': score_short_title,
             'creators': score_creators,
             'corp_creators': score_corp_creators,
             'languages': score_lang,
