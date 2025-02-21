@@ -187,6 +187,18 @@ class TestScore(unittest.TestCase):
 
         self.assertTrue(0.9 < score <= 1, f'0.9 < {score} <= 1')
 
+    def test_evaluate_std_identifiers(self):
+        self.assertTrue(evaluate_std_nums(['123'], ['123']) > 0.9,
+                        f'{evaluate_std_nums(["123"], ["123"])} > 0.9')
+        self.assertTrue(evaluate_std_nums(['H123'], ['I1234']) < 0.5,
+                        f'{evaluate_std_nums(["H123"], ["I1234"])} < 0.5')
+        self.assertTrue(evaluate_std_nums(['H1234'], ['I1234']) > 0.8,
+                        f'{evaluate_std_nums(["H1234"], ["I1234"])} > 0.8')
+        self.assertTrue(evaluate_std_nums(['123'], ['1234']) < 0.5,
+                        f'{evaluate_std_nums(["123"], ["1234"])} < 0.5')
+        self.assertTrue(evaluate_std_nums(['123'], ['456']) < 0.5,
+                        f'{evaluate_std_nums(["123"], ["456"])} < 0.5')
+
 
 if __name__ == '__main__':
     unittest.main()

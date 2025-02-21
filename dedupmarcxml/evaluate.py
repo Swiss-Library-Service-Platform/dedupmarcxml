@@ -11,6 +11,7 @@ from typing import List, Dict, Optional, Literal
 from dedupmarcxml.briefrecord import BriefRec, BriefRecFactory
 import numpy as np
 from copy import deepcopy
+import re
 
 
 @tools.handle_missing_values(key='type')
@@ -324,6 +325,44 @@ def evaluate_parent(parent1: Dict, parent2: Dict) -> float:
 
 
 @tools.handle_missing_values()
+def evaluate_std_nums(ids1: List[str], ids2: List[str]) -> float:
+    """Return the result of the evaluation of similarity of two lists of identifiers.
+
+    :param ids1: list of identifiers to compare
+    :param ids2: list of identifiers to compare
+
+    :return: similarity score between two lists of identifiers as float
+    """
+    ids1 = set(ids1)
+    ids2 = set(ids2)
+
+    if len(set.union(ids1, ids2)) > 0:
+        score1 = len(set.intersection(ids1, ids2)) / len(set.union(ids1, ids2))
+        score1 = score1 ** .05 if score1 > 0 else 0
+    else:
+        score1 = 0
+
+    for num in deepcopy(ids1):
+        num_digit = re.sub(r'\D', '', num)
+        if len(num_digit) > 0:
+            ids1.add(num_digit)
+
+    for num in deepcopy(ids2):
+        num_digit = re.sub(r'\D', '', num)
+        if len(num_digit) > 0:
+            ids2.add(num_digit)
+
+    if len(set.union(ids1, ids2)) > 0:
+        score2 = len(set.intersection(ids1, ids2)) / len(set.union(ids1, ids2))
+        score2 = score2 ** .05 if score2 > 0 else 0
+    else:
+        score2 = 0
+    if score1 > score2:
+        return score1
+    else:
+        return score2 * 0.9
+
+@tools.handle_missing_values()
 def evaluate_identifiers(ids1: List[str], ids2: List[str]) -> float:
     """Return the result of the evaluation of similarity of two lists of identifiers.
 
@@ -339,6 +378,7 @@ def evaluate_identifiers(ids1: List[str], ids2: List[str]) -> float:
         return score ** .05 if score > 0 else 0
     else:
         return 0
+
 
 
 def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec) -> Dict[str, float]:
@@ -386,7 +426,7 @@ def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec) -> Dict[str, flo
     score_parent = evaluate_parent(rec1.data['parent'], rec2.data['parent'])
 
     # We evaluate the similarity of the standard numbers
-    score_std_nums = evaluate_identifiers(rec1.data['std_nums'], rec2.data['std_nums'])
+    score_std_nums = evaluate_std_nums(rec1.data['std_nums'], rec2.data['std_nums'])
 
     # We evaluate the similarity of system numbers
     score_sys_nums = evaluate_identifiers(rec1.data['sys_nums'], rec2.data['sys_nums'])
