@@ -1,6 +1,6 @@
 [project]
 name = "dedupmarcxml"
-version = "0.1.22"
+version = "0.1.23"
 authors = [
   {name="Raphaël Rey", email="raphael.rey@slsp.ch" },
 ]

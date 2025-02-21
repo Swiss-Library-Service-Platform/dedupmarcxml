@@ -167,7 +167,7 @@ class TestScore(unittest.TestCase):
         rec2 = XmlBriefRec(rec2.data)
         sim_score = evaluate_records_similarity(rec1, rec2)
 
-        self.assertTrue(0.5 < sim_score['title'] < 0.7, f'0.5 < {sim_score["title"]} < 0.7')
+        self.assertTrue(0.5 < sim_score['titles'] < 0.7, f'0.5 < {sim_score["titles"]} < 0.7')
         self.assertTrue(0.1 < sim_score['parent'] < 0.4, f'0.1 < {sim_score["parent"]} < 0.4')
 
         score = get_similarity_score(sim_score)
