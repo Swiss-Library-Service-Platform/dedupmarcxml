@@ -67,6 +67,8 @@ def handle_missing_values(default_score: float = 0.2, key=None) -> Callable:
 
             # If inputs are valid, call the original function
             result = func(values1, values2)
+            if result < 0:
+                return abs(result)
             return result * (1 - default_score) + default_score
 
         return wrapper

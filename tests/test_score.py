@@ -69,6 +69,8 @@ class TestScore(unittest.TestCase):
         self.assertTrue(0.5 < evaluate_languages(['eng'], ['fr', 'eng']) < 0.7)
         self.assertTrue(0.85 < evaluate_languages(['eng'], ['eng', 'fr']) < 0.95)
         self.assertTrue(evaluate_languages(['eng'], ['ger']) < 0.5)
+        self.assertTrue(evaluate_languages(['zxx'], ['ger']) == 0.1,
+                        f'{evaluate_languages(["zxx"], ["ger"])} == 0.1')
 
     def test_evaluate_identifiers(self):
         score1 = evaluate_identifiers(['123'], ['123'])
@@ -151,6 +153,7 @@ class TestScore(unittest.TestCase):
         rec = XmlBriefRec(rec.data)
 
         sim_score = evaluate_records_similarity(rec, rec)
+        print(sim_score)
         score = get_similarity_score(sim_score)
         self.assertGreater(score, 0.99)
         self.assertLess(sim_score['std_nums'], 0.01)

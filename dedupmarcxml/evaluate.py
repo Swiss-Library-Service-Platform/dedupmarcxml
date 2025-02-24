@@ -122,9 +122,13 @@ def evaluate_languages(lang1: List[str], lang2: List[str]) -> float:
     """
     lang1 = ['und' if lang=='zxx' else lang for lang in lang1]
     lang2 = ['und' if lang=='zxx' else lang for lang in lang2]
+
     score = len(set.intersection(set(lang1), set(lang2))) / len(set.union(set(lang1), set(lang2)))
     if lang1[0] == lang2[0]:
         score = 0.7 + 0.3 * score
+
+    if (lang1 + lang2).count('und') == 1:
+        score = -0.1
     return score
 
 
