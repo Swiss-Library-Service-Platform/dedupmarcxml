@@ -1,5 +1,5 @@
 import unittest
-from dedupmarcxml.score.extent import get_rounded_extent, calc_with_sets, calc_with_sum
+from dedupmarcxml.score.extent import get_rounded_extent, calc_with_sets, calc_with_sum, calc_notated_music_score
 
 class TestScoreExtent(unittest.TestCase):
 
@@ -21,6 +21,18 @@ class TestScoreExtent(unittest.TestCase):
         self.assertAlmostEqual(calc_with_sum({10, 200}, {210}), 1)
         self.assertGreater(calc_with_sum({10, 200}, {212}), 0.9)
         self.assertLess(calc_with_sum({10, 20, 30}, {10, 20}), 0.1)
+
+    def test_calc_notated_music_score(self):
+        self.assertLess(calc_notated_music_score('212, 42, 1 / 1 partition (XLII, 212 pages)',
+                                                 '212, 42, 1 / 1 Taschenpartitur (XLII, 212 S.)', 1),
+                        0.8)
+        self.assertGreater(calc_notated_music_score('212, 42, 1 / 1 partition (XLII, 212 pages)',
+                                                 '212, 42, 1 / 1 Tschenpartitur (XLII, 212 S.)', 1),
+                        0.8)
+        self.assertTrue(0.6 < calc_notated_music_score('112, 1 / 1 réduction (112 pages)',
+                                                 '1 / 1 Klavierauszug', 0.4) < 0.7,
+                        f'calc_notated_music_score("112, 1 / 1 réduction (112 pages)", "1 / 1 Klavierauszug", 4) = {calc_notated_music_score("112, 1 / 1 réduction (112 pages)", "1 / 1 Klavierauszug", 0.4)}')
+
 
 if __name__ == '__main__':
     unittest.main()

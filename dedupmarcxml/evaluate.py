@@ -177,7 +177,7 @@ def evaluate_editions(ed1: Dict, ed2: Dict) -> float:
 
 
 @tools.handle_missing_values(key='nb')
-def evaluate_extent(extent1_dict: Dict, extent2_dict: Dict) -> float:
+def evaluate_extent(extent1_dict: Dict, extent2_dict: Dict, rec_type: Optional[str] = None) -> float:
     """Evaluate similarity of extent
 
     Idea is to calculate three scores and combine them:
@@ -187,6 +187,7 @@ def evaluate_extent(extent1_dict: Dict, extent2_dict: Dict) -> float:
 
     :param extent1_dict: dictionary containing extent of the first record
     :param extent2_dict: dictionary containing extent of the second record
+    :param rec_type: type of the record
 
     :return: float with matching score
     """
@@ -208,9 +209,14 @@ def evaluate_extent(extent1_dict: Dict, extent2_dict: Dict) -> float:
     # added parts of the book in the extent.
 
     if score3 - score1 > 0.5 and score3 > 0.95 and sum(extent1) + sum(extent2) > 100:
-        return (score1 + score2 + score3 * 10) / 12
+        score = (score1 + score2 + score3 * 10) / 12
+    else:
+        score = (score1 + score2 + score3) / 3
 
-    return (score1 + score2 + score3) / 3
+    if rec_type == 'Notated music':
+        score = scorelib.extent.calc_notated_music_score(extent1_dict['txt'], extent2_dict['txt'], score)
+
+    return score
 
 
 @tools.handle_values_lists
@@ -393,6 +399,12 @@ def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec) -> Dict[str, flo
 
     :return: float with matching score
     """
+    # We need to know the record type to calculate the similarity of extent
+    if rec1.data['format']['type'] == rec2.data['format']['type']:
+        rec_type = rec1.data['format']['type']
+    else:
+        rec_type = None
+
     # We evaluate the similarity of the formats
     score_format = evaluate_format(rec1.data['format'], rec2.data['format'])
 
@@ -418,7 +430,7 @@ def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec) -> Dict[str, flo
     score_ed = evaluate_editions(rec1.data['editions'], rec2.data['editions'])
 
     # We evaluate the similarity of the extent
-    score_ext = evaluate_extent(rec1.data['extent'], rec2.data['extent'])
+    score_ext = evaluate_extent(rec1.data['extent'], rec2.data['extent'], rec_type=rec_type)
 
     # We evaluate the similarity of the years
     score_yr = evaluate_years_start_and_end(rec1.data['years'], rec2.data['years'])

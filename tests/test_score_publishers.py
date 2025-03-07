@@ -26,10 +26,16 @@ class TestScorePublishers(unittest.TestCase):
         self.assertLess(factor, 1)
         self.assertGreater(factor, 0.9)
 
+        pub1, pub2, factor = normalize_publishers('A-R Editions', 'A-R Editions, Inc')
+        self.assertEqual(pub1, 'A-R EDITIONS')
+        self.assertEqual(pub2, 'A-R EDITIONS INC')
+        self.assertEqual(factor, 1)
+
     def test_evaluate_publishers_vect(self):
         self.assertTrue(evaluate_publishers_vect('ED PAYOT', 'PAYOT') > 0.9)
         self.assertTrue(evaluate_publishers_vect('PAYOT GENEVE', 'PAYOT ZURICH') > 0.9)
         self.assertTrue(evaluate_publishers_vect('PAYO GENEVE', 'PAYOT GENEVE') < 0.5)
+        self.assertTrue(evaluate_publishers_vect('A-R EDITIONS', 'A-R EDITIONS INC') > 0.9)
 
     def test_normalize_txt(self):
         self.assertEqual(normalize_txt('Springer'), 'SPRINGER')

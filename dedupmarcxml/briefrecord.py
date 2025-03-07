@@ -185,7 +185,7 @@ class BriefRecFactory(ABC):
         extent_lower = extent.lower()
         extent_list = [int(f) for f in re.findall(r'\d+', extent_lower)]
         extent_list += [tools.roman_to_int(f) for f in re.findall(r'\b[ivxlcdm]+\b', extent_lower)
-                        if tools.roman_to_int(f) is not None]
+                        if tools.roman_to_int(f) is not None and f not in ['d', 'cm']]
 
         return {'nb': sorted(extent_list, reverse=True), 'txt': extent}
 
@@ -570,7 +570,16 @@ class BriefRecFactory(ABC):
         """
         extent_field = cls.find(bib, '300$$a')
 
+
         if extent_field is not None:
+            extent_field_300e = cls.find(bib, '300$$e')
+            if extent_field_300e is not None:
+                extent_field = extent_field + ', ' + extent_field_300e
+            extent = cls.normalize_extent(extent_field)
+            f348s = cls.findall(bib, '348$$a')
+            if len(f348s) > 0:
+                extent['txt'] = extent['txt'] + ', ' + ', '.join(f348s)
+
             return cls.normalize_extent(extent_field)
 
         return None

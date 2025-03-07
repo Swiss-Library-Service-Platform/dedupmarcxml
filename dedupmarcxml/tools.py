@@ -57,7 +57,8 @@ def handle_missing_values(default_score: float = 0.2, key=None) -> Callable:
         @wraps(func)
         def wrapper(
             values1: Optional[Union[str, List[str], Dict]],
-            values2: Optional[Union[str, List[str], Dict]]
+            values2: Optional[Union[str, List[str], Dict]],
+            rec_type: Optional[str] = None,
         ) -> float:
 
             if is_empty(values1, key=key) and is_empty(values2, key=key):
@@ -66,7 +67,11 @@ def handle_missing_values(default_score: float = 0.2, key=None) -> Callable:
                 return default_score / 2
 
             # If inputs are valid, call the original function
-            result = func(values1, values2)
+            if rec_type is not None:
+                result = func(values1, values2, rec_type)
+            else:
+                result = func(values1, values2)
+
             if result < 0:
                 return abs(result)
             return result * (1 - default_score) + default_score
@@ -86,7 +91,9 @@ def to_ascii(text: str) -> str:
     translation_table = str.maketrans({
         'Ä': 'AE',
         'Ö': 'OE',
+        'Ő': 'OE',
         'Ü': 'UE',
+        'Ű': 'UE',
     })
 
     text_upper = text.upper()
@@ -96,17 +103,24 @@ def to_ascii(text: str) -> str:
     return unicodedata.normalize('NFKD', converted_text).encode('ASCII', 'ignore').decode()
 
 
-def remove_special_chars(txt: str, keep_dot: bool = False) -> str:
+def remove_special_chars(txt: str, keep_dot: bool = False, keep_dash: bool = False) -> str:
     """Remove special chars from txt
 
     :param txt: string to normalize
     :param keep_dot: boolean to keep dots
+    :param keep_dash: boolean to keep dashes
 
     :return: string with normalized text
     """
 
     # Remove special chars, we can make an exception for dots
-    txt = re.sub(r'[^\w\s]' if keep_dot is False else r'[^\w\s\.]', ' ', txt)
+    regex = r'[^\w\s'
+    if keep_dot is True:
+        regex += r'\.'
+    if keep_dash is True:
+        regex += r'\-'
+    regex += r']'
+    txt = re.sub(regex, ' ', txt)
 
     # remove duplicate spaces
     return re.sub(r'\s+', ' ', txt).strip()

@@ -26,8 +26,8 @@ def normalize_publishers(pub1: str, pub2: str) -> Tuple[str, str, float]:
     """
 
     # Normalize publisher names
-    pub1 = normalize_txt(pub1, keep_dot=True)
-    pub2 = normalize_txt(pub2, keep_dot=True)
+    pub1 = normalize_txt(pub1, keep_dot=True, keep_dash=True)
+    pub2 = normalize_txt(pub2, keep_dot=True, keep_dash=True)
 
     # Solve abbreviations (with dots and in capitals)
     pub1, pub2 = tools.solve_abbreviations(pub1, pub2)
@@ -41,11 +41,12 @@ def normalize_publishers(pub1: str, pub2: str) -> Tuple[str, str, float]:
 
     return pub1, pub2, factor
 
-def normalize_txt(txt, keep_dot=False) -> str:
+def normalize_txt(txt, keep_dot=False, keep_dash=False) -> str:
     """Transform txt to ascii, remove special chars, make upper case
 
     :param txt: string to normalize
     :param keep_dot: boolean to keep dots
+    :param keep_dash: boolean to keep dashes
 
     :return: string with normalized text
     """
@@ -62,7 +63,7 @@ def normalize_txt(txt, keep_dot=False) -> str:
             ' ',
                 txt)
 
-    return tools.remove_special_chars(txt, keep_dot=keep_dot)
+    return tools.remove_special_chars(txt, keep_dot=keep_dot, keep_dash=keep_dash)
 
 
 def correct_small_differences(pub1: str, pub2: str) -> Tuple[str, str, float]:
