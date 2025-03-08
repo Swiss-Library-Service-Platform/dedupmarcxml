@@ -146,6 +146,19 @@ class TestScore(unittest.TestCase):
         self.assertTrue(score1 > 0.7, f'{score1} > 0.7')
 
 
+    def test_evaluate_std_identifiers(self):
+        self.assertTrue(evaluate_std_nums(['123'], ['123']) > 0.9,
+                        f'{evaluate_std_nums(["123"], ["123"])} > 0.9')
+        self.assertTrue(evaluate_std_nums(['H123'], ['I1234']) < 0.5,
+                        f'{evaluate_std_nums(["H123"], ["I1234"])} < 0.5')
+        self.assertTrue(evaluate_std_nums(['H1234'], ['I1234']) > 0.8,
+                        f'{evaluate_std_nums(["H1234"], ["I1234"])} > 0.8')
+        self.assertTrue(evaluate_std_nums(['123'], ['1234']) < 0.5,
+                        f'{evaluate_std_nums(["123"], ["1234"])} < 0.5')
+        self.assertTrue(evaluate_std_nums(['123'], ['456']) < 0.5,
+                        f'{evaluate_std_nums(["123"], ["456"])} < 0.5')
+
+
     def test_evaluate_records_similarity_1(self):
         mms_id = '991036265429705501'
 
@@ -190,18 +203,18 @@ class TestScore(unittest.TestCase):
 
         self.assertTrue(0.9 < score <= 1, f'0.9 < {score} <= 1')
 
-    def test_evaluate_std_identifiers(self):
-        self.assertTrue(evaluate_std_nums(['123'], ['123']) > 0.9,
-                        f'{evaluate_std_nums(["123"], ["123"])} > 0.9')
-        self.assertTrue(evaluate_std_nums(['H123'], ['I1234']) < 0.5,
-                        f'{evaluate_std_nums(["H123"], ["I1234"])} < 0.5')
-        self.assertTrue(evaluate_std_nums(['H1234'], ['I1234']) > 0.8,
-                        f'{evaluate_std_nums(["H1234"], ["I1234"])} > 0.8')
-        self.assertTrue(evaluate_std_nums(['123'], ['1234']) < 0.5,
-                        f'{evaluate_std_nums(["123"], ["1234"])} < 0.5')
-        self.assertTrue(evaluate_std_nums(['123'], ['456']) < 0.5,
-                        f'{evaluate_std_nums(["123"], ["456"])} < 0.5')
+    def test_evaluate_records_similarity_4(self):
+        mms_id1 = '991108585289705501'
+        mms_id2 = '991105576979705501'
+        rec1 = SruRecord(mms_id1)
+        rec1 = XmlBriefRec(rec1.data)
+        rec2 = SruRecord(mms_id2)
+        rec2 = XmlBriefRec(rec2.data)
 
+        sim_score = evaluate_records_similarity(rec1, rec2)
+        score = get_similarity_score(sim_score, method='random_forest_music')
+
+        self.assertTrue(score < 0.3, f'{score} < 0.3')
 
 if __name__ == '__main__':
     unittest.main()

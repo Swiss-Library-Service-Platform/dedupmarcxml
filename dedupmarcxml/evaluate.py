@@ -475,7 +475,8 @@ def get_similarity_score(sim_analysis: Dict[str, float],
 
     :return: similarity score between two records as float
     """
-
+    if method == 'random_forest_music':
+        return scorelib.methods.random_forest_music(sim_analysis)
     return scorelib.methods.mean(sim_analysis)
 
 

@@ -15,6 +15,8 @@ import itertools
 
 editions_data = pickle.load(open(os.path.join(os.path.dirname(__file__), 'data/editions_data.pickle'), 'rb'))
 publishers_data = pickle.load(open(os.path.join(os.path.dirname(__file__), 'data/publishers_data.pickle'), 'rb'))
+rf_music_model = pickle.load(open(os.path.join(os.path.dirname(__file__),
+                                               'data/randomforest_music_model.pickle'), 'rb'))
 
 def handle_values_lists(func: Callable) -> Callable:
     """
