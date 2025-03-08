@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 from dedupmarcxml import tools
 
+method_list = ['mean', 'random_forest_music']
+
 def mean(results: Dict[str, float]) -> float:
     """
     Calculate the mean of the values in the two dictionaries. We exclude
