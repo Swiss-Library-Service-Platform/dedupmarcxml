@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from dedupmarcxml import tools
 
-method_list = ['mean', 'random_forest_music', 'mlp_book']
+method_list = ['mean', 'random_forest_book', 'random_forest_music', 'mlp_book']
 
 def mean(results: Dict[str, float]) -> float:
     """
