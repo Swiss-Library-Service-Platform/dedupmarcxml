@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from dedupmarcxml import tools
 
-method_list = ['mean', 'random_forest_music']
+method_list = ['mean', 'random_forest_music', 'mlp_book']
 
 def mean(results: Dict[str, float]) -> float:
     """
@@ -33,5 +33,34 @@ def random_forest_music(results: Dict[str, float]) -> float:
     """
 
     score = tools.rf_music_model.predict_proba(pd.DataFrame(results, index=[1]))[0][1]
+
+    return score
+
+
+def mlp_book(results: Dict[str, float]) -> float:
+    """
+    Calculate the probability according to the model using the
+    values in the two dictionaries.
+
+    :param results: dictionary with results values
+
+    :return: calculated score of the classifier
+    """
+
+    score = tools.mlp_book_model.predict_proba(pd.DataFrame(results, index=[1]))[0][1]
+
+    return score
+
+def random_forest_book(results: Dict[str, float]) -> float:
+    """
+    Calculate the probability according to the model using the
+    values in the two dictionaries.
+
+    :param results: dictionary with results values
+
+    :return: calculated score of the classifier
+    """
+
+    score = tools.rf_book_model.predict_proba(pd.DataFrame(results, index=[1]))[0][1]
 
     return score

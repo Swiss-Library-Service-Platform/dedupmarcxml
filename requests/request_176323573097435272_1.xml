@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+  <version>1.2</version>
+  <numberOfRecords>1</numberOfRecords>
+  <records>
+    <record>
+      <recordSchema>marcxml</recordSchema>
+      <recordPacking>xml</recordPacking>
+      <recordData>
+        <record xmlns="http://www.loc.gov/MARC21/slim">
+          <leader>01342nam a2200337 c 4500</leader>
+          <controlfield tag="001">991086925379705501</controlfield>
+          <controlfield tag="005">20230214194712.0</controlfield>
+          <controlfield tag="008">201012s2012    xxu||||| |||| 00| ||eng d</controlfield>
+          <datafield ind1=" " ind2=" " tag="020">
+            <subfield code="a">9781439896945</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(swissbib)239562186-41slsp_network</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">239562186</subfield>
+            <subfield code="9">ExL</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(RERO)R006348427-41slsp</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="035">
+            <subfield code="a">(NEBIS)009723125EBI01</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="040">
+            <subfield code="a">RERO frbcuc</subfield>
+            <subfield code="d">CH-ZuSLS</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="072">
+            <subfield code="a">in</subfield>
+            <subfield code="2">rero</subfield>
+          </datafield>
+          <datafield ind1="1" ind2=" " tag="100">
+            <subfield code="a">Johnson, Mark James</subfield>
+            <subfield code="0">(IDREF)159762561</subfield>
+            <subfield code="4">cre</subfield>
+          </datafield>
+          <datafield ind1="1" ind2="0" tag="245">
+            <subfield code="a">&lt;&lt;A&gt;&gt; concise introduction to programming in Python</subfield>
+            <subfield code="c">Johnson, Mark J.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="1" tag="264">
+            <subfield code="a">Boca Raton</subfield>
+            <subfield code="b">CRC Press</subfield>
+            <subfield code="c">2012</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="300">
+            <subfield code="a">205 p.</subfield>
+            <subfield code="b">ill.</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="336">
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="337">
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="338">
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+          </datafield>
+          <datafield ind1="0" ind2=" " tag="490">
+            <subfield code="a">Chapman &amp; Hall/CRC textbooks in computing</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">Programmation</subfield>
+            <subfield code="0">(IDREF)028625056</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">Python (langage de programmation)</subfield>
+            <subfield code="0">(IDREF)051626225</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="650">
+            <subfield code="a">PYTHON (PROGRAMMIERSPRACHEN)</subfield>
+            <subfield code="9">ger</subfield>
+            <subfield code="0">(ETHUDK)000062602</subfield>
+            <subfield code="2">ethudk</subfield>
+          </datafield>
+          <datafield ind1=" " ind2="7" tag="655">
+            <subfield code="a">Manuels d'enseignement</subfield>
+            <subfield code="0">(IDREF)027446514</subfield>
+            <subfield code="2">idref</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="690">
+            <subfield code="a">519.61.PYT</subfield>
+            <subfield code="d">Programmiersprachen: PYTHON</subfield>
+            <subfield code="2">uzb-UK</subfield>
+          </datafield>
+          <datafield ind1="4" ind2=" " tag="856">
+            <subfield code="3">Titelblatt und Inhaltsverzeichnis</subfield>
+            <subfield code="u">https://toc.library.ethz.ch/objects/pdf02/UFBI_978-1-4398-9694-5_01.pdf</subfield>
+            <subfield code="q">pdf</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_UZB</subfield>
+            <subfield code="6">990097231250205508</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_ETH</subfield>
+            <subfield code="6">990097231250205503</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+          <datafield ind1="0" ind2="1" tag="852">
+            <subfield code="a">41SLSP_BCUFR</subfield>
+            <subfield code="6">991014971329705509</subfield>
+            <subfield code="9">P</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="900">
+            <subfield code="a">REROnoselfmerge</subfield>
+          </datafield>
+          <datafield ind1=" " ind2=" " tag="949">
+            <subfield code="a">https://toc.library.ethz.ch/objects/pdf02/UFBI_978-1-4398-9694-5_01.pdf</subfield>
+          </datafield>
+        </record>
+      </recordData>
+      <recordIdentifier>991086925379705501</recordIdentifier>
+      <recordPosition>1</recordPosition>
+    </record>
+  </records>
+  <extraResponseData xmlns:xb="http://www.exlibris.com/repository/search/xmlbeans/">
+    <xb:exact>true</xb:exact>
+    <xb:responseDate>2025-03-20T08:19:42+0100</xb:responseDate>
+  </extraResponseData>
+</searchRetrieveResponse>

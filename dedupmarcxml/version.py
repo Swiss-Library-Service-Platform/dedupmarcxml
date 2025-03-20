@@ -1,2 +1,2 @@
-__version__ = '0.1.30'
+__version__ = '0.2.0'
 commit_message = f'Backup'

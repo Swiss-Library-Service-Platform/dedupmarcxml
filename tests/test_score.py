@@ -216,5 +216,30 @@ class TestScore(unittest.TestCase):
 
         self.assertTrue(score < 0.3, f'{score} < 0.3')
 
+    def test_evaluate_records_similarity_5(self):
+        mms_id1 = '991086925379705501'
+        mms_id2 = '991132983529705501'
+        rec1 = SruRecord(mms_id1)
+        rec1 = XmlBriefRec(rec1.data)
+        rec2 = SruRecord(mms_id2)
+        rec2 = XmlBriefRec(rec2.data)
+
+        sim_score = evaluate_records_similarity(rec1, rec2)
+        score = get_similarity_score(sim_score, method='random_forest_book')
+
+        self.assertTrue(score < 0.3, f'{score} < 0.3')
+
+    def test_evaluate_records_similarity_6(self):
+        mms_id1 = '991086925379705501'
+        mms_id2 = '991086925379705501'
+        rec1 = SruRecord(mms_id1)
+        rec1 = XmlBriefRec(rec1.data)
+        rec2 = SruRecord(mms_id2)
+        rec2 = XmlBriefRec(rec2.data)
+
+        sim_score = evaluate_records_similarity(rec1, rec2)
+        score = get_similarity_score(sim_score, method='random_forest_book')
+        self.assertTrue(score > 0.9, f'{score} > 0.9')
+
 if __name__ == '__main__':
     unittest.main()
