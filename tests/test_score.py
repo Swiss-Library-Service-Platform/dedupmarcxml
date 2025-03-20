@@ -21,6 +21,15 @@ class TestScore(unittest.TestCase):
         self.assertTrue(evaluate_publishers(['Springer'], ['Payot', 'Springer']) > 0.9)
         self.assertTrue(0.4 < evaluate_publishers('Springer', ['Springer Nature']) < 0.6)
 
+    def test_calculate_publishers_score_3(self):
+        self.assertTrue(evaluate_publishers(['Universal-Edition'], ['Universal edition']) > 0.9)
+
+    def test_calculate_publishers_score_4(self):
+        self.assertTrue(evaluate_publishers(['C.N.R.S.'], ['Centre national de la recherche scientifique']) > 0.9)
+
+    def test_calculate_publishers_score_5(self):
+        self.assertTrue(evaluate_publishers(['Le C. N. R. S.'], ['Centre national de la recherche scientifique']) > 0.85)
+
     def test_calculate_editions_score(self):
         self.assertGreater(evaluate_editions([{'nb': [2], 'txt': '2e ed.'}],
                                              [{'nb': [2], 'txt': 'Deuxième édition'}]), 0.9)

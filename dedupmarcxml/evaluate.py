@@ -120,8 +120,8 @@ def evaluate_languages(lang1: List[str], lang2: List[str]) -> float:
 
     :return: float with matching score
     """
-    lang1 = ['und' if lang=='zxx' else lang.lower() for lang in lang1]
-    lang2 = ['und' if lang=='zxx' else lang.lower() for lang in lang2]
+    lang1 = ['und' if lang in ['zxx', 'mul'] else lang.lower() for lang in lang1]
+    lang2 = ['und' if lang  in ['zxx', 'mul'] else lang.lower() for lang in lang2]
 
     score = len(set.intersection(set(lang1), set(lang2))) / len(set.union(set(lang1), set(lang2)))
     if lang1[0] == lang2[0]:
@@ -144,10 +144,22 @@ def evaluate_publishers(pub1: str, pub2: str) -> float:
     """
 
     # We normalize the publishers and calculate a factor
-    pub1, pub2, factor = scorelib.publishers.normalize_publishers(pub1, pub2)
+    pub1_cor, pub2_cor, factor = scorelib.publishers.normalize_publishers(pub1, pub2, keep_dash=True)
 
     # We calculate vectorized similarity
-    score_vect = scorelib.publishers.evaluate_publishers_vect(pub1, pub2)
+    score_vect = scorelib.publishers.evaluate_publishers_vect(pub1_cor, pub2_cor)
+
+    # If there is a dash in the publisher, we try to correct the result ignoring it.
+    # If the result is better, we keep it.
+    if '-' in pub1 or '-' in pub2:
+        pub1_cor_no_dash, pub2_cor_no_dash, factor_no_dash = scorelib.publishers.normalize_publishers(pub1,
+                                                                                                      pub2,
+                                                                                                      keep_dash=False)
+        score_vect_no_dash = scorelib.publishers.evaluate_publishers_vect(pub1_cor_no_dash, pub2_cor_no_dash)
+
+        if score_vect_no_dash * factor_no_dash > score_vect * factor:
+            score_vect = score_vect_no_dash
+            factor = factor_no_dash
 
     # we correct the result with a factor granted by misspelling test
     return score_vect * factor

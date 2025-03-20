@@ -8,11 +8,11 @@ and evaluate the similarity between publisher names using vectorized systems.
 import re
 import numpy as np
 import Levenshtein
-from typing import Tuple
+from typing import Tuple, Optional
 from dedupmarcxml import tools
 
 
-def normalize_publishers(pub1: str, pub2: str) -> Tuple[str, str, float]:
+def normalize_publishers(pub1: str, pub2: str, keep_dash=True) -> Tuple[str, str, float]:
     """Normalize publisher names and calculate a factor to correct small differences
 
     This function normalizes the publisher names, solves abbreviations, and calculates a factor
@@ -20,14 +20,15 @@ def normalize_publishers(pub1: str, pub2: str) -> Tuple[str, str, float]:
 
     :param pub1: string containing publisher of the first record
     :param pub2: string containing publisher of the second record
+    :param keep_dash: boolean to keep dashes
 
     :return: tuple containing the two publisher names and a factor
         indicating to ponderate the final result in case of changes.
     """
 
     # Normalize publisher names
-    pub1 = normalize_txt(pub1, keep_dot=True, keep_dash=True)
-    pub2 = normalize_txt(pub2, keep_dot=True, keep_dash=True)
+    pub1 = normalize_txt(pub1, keep_dot=True, keep_dash=keep_dash)
+    pub2 = normalize_txt(pub2, keep_dot=True, keep_dash=keep_dash)
 
     # Solve abbreviations (with dots and in capitals)
     pub1, pub2 = tools.solve_abbreviations(pub1, pub2)
@@ -41,7 +42,7 @@ def normalize_publishers(pub1: str, pub2: str) -> Tuple[str, str, float]:
 
     return pub1, pub2, factor
 
-def normalize_txt(txt, keep_dot=False, keep_dash=False) -> str:
+def normalize_txt(txt: str, keep_dot: Optional[bool] = False, keep_dash: Optional[bool] = False) -> str:
     """Transform txt to ascii, remove special chars, make upper case
 
     :param txt: string to normalize
@@ -50,6 +51,9 @@ def normalize_txt(txt, keep_dot=False, keep_dash=False) -> str:
 
     :return: string with normalized text
     """
+
+    # Clean dots of abbreviations
+    txt = re.sub(r'\b(\w)\.\s?\b', r'\1', txt)
 
     # Solve abbreviations specific to publishers
     for abbreviation, translation in tools.publishers_data['abbreviations'].items():
