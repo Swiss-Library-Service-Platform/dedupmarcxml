@@ -30,6 +30,9 @@ class TestScore(unittest.TestCase):
     def test_calculate_publishers_score_5(self):
         self.assertTrue(evaluate_publishers(['Le C. N. R. S.'], ['Centre national de la recherche scientifique']) > 0.85)
 
+    def test_calculate_publishers_score_6(self):
+        self.assertTrue(evaluate_publishers(['W.W.Norton'], ['Norton']) > 0.85)
+
     def test_calculate_editions_score(self):
         self.assertGreater(evaluate_editions([{'nb': [2], 'txt': '2e ed.'}],
                                              [{'nb': [2], 'txt': 'Deuxième édition'}]), 0.9)

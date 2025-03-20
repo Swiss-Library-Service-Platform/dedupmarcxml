@@ -34,8 +34,8 @@ def normalize_publishers(pub1: str, pub2: str, keep_dash=True) -> Tuple[str, str
     pub1, pub2 = tools.solve_abbreviations(pub1, pub2)
 
     # Dots are not needed anymore
-    pub1 = pub1.replace('.', '')
-    pub2 = pub2.replace('.', '')
+    pub1 = re.sub(r'\.\s*', ' ', pub1)
+    pub2 = re.sub(r'\.\s*', ' ', pub2)
 
     # Correct small differences
     pub1, pub2, factor = correct_small_differences(pub1, pub2)
@@ -53,11 +53,13 @@ def normalize_txt(txt: str, keep_dot: Optional[bool] = False, keep_dash: Optiona
     """
 
     # Clean dots of abbreviations
-    txt = re.sub(r'\b(\w)\.\s?\b', r'\1', txt)
+    txt_temp = re.sub(r'\b(\w)\.\s?\b', r'\1', txt)
 
     # Solve abbreviations specific to publishers
     for abbreviation, translation in tools.publishers_data['abbreviations'].items():
-        txt = re.sub(r'\b' + abbreviation + r'\b', translation, txt)
+        if re.match(r'\b' + abbreviation + r'\b', txt_temp) is not None:
+            txt_temp = re.sub(r'\b' + abbreviation + r'\b', translation, txt_temp)
+            txt = txt_temp
 
     # Transform to ASCII and uppercase
     txt = tools.to_ascii(txt)
