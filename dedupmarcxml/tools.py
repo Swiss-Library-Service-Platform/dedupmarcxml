@@ -100,6 +100,12 @@ def to_ascii(text: str) -> str:
         'Ő': 'OE',
         'Ü': 'UE',
         'Ű': 'UE',
+        '‘': "'",
+        '’': "'",
+        '€': 'EUR',
+        '£': 'GBP',
+        '–': '-',
+        '—': '-'
     })
 
     text_upper = text.upper()
@@ -171,11 +177,12 @@ def solve_abbreviations(txt1: str, txt2: str) -> Tuple[str, str]:
     return txt1, txt2
 
 
-def evaluate_text_similarity(txt1: str, txt2: str) -> float:
+def evaluate_text_similarity(txt1: str, txt2: str, strict: Optional[bool] = False) -> float:
     """Evaluate similarity between two texts
 
     :param txt1: string containing text of the first record
     :param txt2: string containing text of the second record
+    :param strict: boolean to use strong penalties for different lengths
 
     :return: float with matching score
     """
@@ -187,9 +194,14 @@ def evaluate_text_similarity(txt1: str, txt2: str) -> float:
     t_list2 = re.findall(r'\b\w+\b', txt2)
     if len(t_list1) < len(t_list2):
         t_list1, t_list2 = (t_list2, t_list1)
-
-    diff = len(t_list1) - len(t_list2)
-    coef = 1 / diff ** 0.05 - 0.15 if diff > 0 else 1
+    if strict is False:
+        diff = len(t_list1) - len(t_list2)
+        coef = 1 / diff ** 0.05 - 0.15 if diff > 0 else 1
+    else:
+        if len(t_list1) == 0 or len(t_list2) == 0:
+            coef = 0
+        else:
+            coef = np.log(len(t_list2)*1.2) / np.log(len(t_list1)*1.2)
 
     score = 0
     # Idea is to compare the two texts word by word and take the best score.

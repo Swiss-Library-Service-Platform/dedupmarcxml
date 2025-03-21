@@ -97,12 +97,12 @@ class TestScore(unittest.TestCase):
         score4 = evaluate_identifiers(['123'], ['456'])
         self.assertTrue(score4 < 0.3)
 
-    def test_evaluate_titles(self):
+    def test_evaluate_titles_1(self):
         score1 = evaluate_short_titles('Mozrt', 'Mozart')
         self.assertTrue(score1 > 0.9)
 
         score2 = evaluate_short_titles('Mozart, un compositeur de génie', 'Mozart, un compositeur')
-        self.assertTrue(0.8 < score2 < 0.95, f'0.8 < {score2} < 0.95')
+        self.assertTrue(0.7 < score2 < 0.9, f'0.7 < {score2} < 0.9')
 
         score3 = evaluate_short_titles('Mozart', 'Beethoven')
         self.assertTrue(score3 < 0.5)
@@ -114,6 +114,14 @@ class TestScore(unittest.TestCase):
                                        ['Vier fün sechs', 'Un deux trois'])
         self.assertTrue(score4 > 0.9)
 
+    def test_evaluate_titles_2(self):
+        score1 = evaluate_titles({'m': "Franz Liszt's songs for voice and piano", 's': "the composers's approach to poetry and music"},
+                                 {'m': "Franz Liszt’s songs for voice and piano", 's': "the composer’s approach to poetry and music"})
+        self.assertTrue(score1 > 0.9)
+
+        score2 = evaluate_short_titles('Grand-orgue Pascal Quoirin', 'Grand')
+
+        self.assertTrue(score2 < 0.7)
 
     def test_evaluate_creators(self):
         score1 = evaluate_creators(['Mozart'], ['Mozart'])
@@ -178,7 +186,7 @@ class TestScore(unittest.TestCase):
         rec = XmlBriefRec(rec.data)
 
         sim_score = evaluate_records_similarity(rec, rec)
-        print(sim_score)
+        # print(sim_score)
         score = get_similarity_score(sim_score)
         self.assertGreater(score, 0.99)
         self.assertLess(sim_score['std_nums'], 0.01)

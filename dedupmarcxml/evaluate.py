@@ -75,7 +75,7 @@ def evaluate_titles(title1: Dict,
     norm_title1 = tools.remove_special_chars(norm_title1)
     norm_title2 = tools.remove_special_chars(norm_title2)
 
-    return tools.evaluate_text_similarity(norm_title1, norm_title2)
+    return tools.evaluate_text_similarity(norm_title1, norm_title2, strict=True)
 
 
 @tools.handle_values_lists
@@ -94,7 +94,7 @@ def evaluate_short_titles(title1: str, title2: str) -> float:
     norm_title1 = tools.remove_special_chars(norm_title1)
     norm_title2 = tools.remove_special_chars(norm_title2)
 
-    return tools.evaluate_text_similarity(norm_title1, norm_title2)
+    return tools.evaluate_text_similarity(norm_title1, norm_title2, strict=True)
 
 
 @tools.handle_missing_values()
