@@ -123,6 +123,11 @@ class TestScore(unittest.TestCase):
 
         self.assertTrue(score2 < 0.7)
 
+    def test_evaluate_titles_3(self):
+        score1 = evaluate_titles({'m': "Le pain und le vin", 's':''},
+                                 {'m': "Le pain & le vin", 's':''})
+        self.assertTrue(score1 > 0.99)
+
     def test_evaluate_creators(self):
         score1 = evaluate_creators(['Mozart'], ['Mozart'])
         self.assertTrue(score1 > 0.9)
@@ -166,7 +171,7 @@ class TestScore(unittest.TestCase):
         self.assertTrue(score1 > 0.7, f'{score1} > 0.7')
 
 
-    def test_evaluate_std_identifiers(self):
+    def test_evaluate_std_identifiers_1(self):
         self.assertTrue(evaluate_std_nums(['123'], ['123']) > 0.9,
                         f'{evaluate_std_nums(["123"], ["123"])} > 0.9')
         self.assertTrue(evaluate_std_nums(['H123'], ['I1234']) < 0.5,
@@ -177,6 +182,10 @@ class TestScore(unittest.TestCase):
                         f'{evaluate_std_nums(["123"], ["1234"])} < 0.5')
         self.assertTrue(evaluate_std_nums(['123'], ['456']) < 0.5,
                         f'{evaluate_std_nums(["123"], ["456"])} < 0.5')
+
+    def test_evaluate_std_identifiers_2(self):
+        self.assertTrue(evaluate_std_nums(['9782843853395'], ['9782843853395']) > 0.98,
+                        f'{evaluate_std_nums(["9782843853395"], ["9782843853395"])} > 0.98')
 
 
     def test_evaluate_records_similarity_1(self):

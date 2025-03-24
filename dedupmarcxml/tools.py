@@ -125,6 +125,10 @@ def remove_special_chars(txt: str, keep_dot: bool = False, keep_dash: bool = Fal
     :return: string with normalized text
     """
 
+    # Handle & => AND
+    txt = re.sub(r'\b(UND|ET|E|Y|EN)\b', '&', txt)
+    txt = re.sub(r'\b&\b', 'AND', txt)
+
     # Remove special chars, we can make an exception for dots
     regex = r'[^\w\s'
     if keep_dot is True:

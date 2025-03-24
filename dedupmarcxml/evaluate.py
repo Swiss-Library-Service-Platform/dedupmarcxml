@@ -379,7 +379,7 @@ def evaluate_std_nums(ids1: List[str], ids2: List[str]) -> float:
         score2 = score2 ** .05 if score2 > 0 else 0
     else:
         score2 = 0
-    if score1 > score2:
+    if score1 >= score2:
         return score1
     else:
         return score2 * 0.9
