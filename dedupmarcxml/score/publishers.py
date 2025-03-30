@@ -66,8 +66,7 @@ def normalize_txt(txt: str, keep_dot: Optional[bool] = False, keep_dash: Optiona
 
     # Remove unknown data
     txt = re.sub(r'EDITORE\sNON\sIDENTIFICATO|VERLAG\sNICHT\sERMITTELBAR|EDITEUR\sNON\sIDENTIFIE|PUBLISHER\sNOT\sIDENTIFIED',
-            ' ',
-                txt)
+            'PUBLISHER NOT IDENTIFIED', txt)
 
     return tools.remove_special_chars(txt, keep_dot=keep_dot, keep_dash=keep_dash)
 
