@@ -19,6 +19,8 @@ rf_music_model = pickle.load(open(os.path.join(os.path.dirname(__file__),
                                                'data/randomforest_music_model.pickle'), 'rb'))
 rf_book_model = pickle.load(open(os.path.join(os.path.dirname(__file__),
                                               'data/randomforest_book_model.pickle'), 'rb'))
+rf_general_model = pickle.load(open(os.path.join(os.path.dirname(__file__),
+                                                 'data/randomforest_general_model.pickle'), 'rb'))
 mlp_book_model = pickle.load(open(os.path.join(os.path.dirname(__file__),
                                                'data/mlp_classifier_book_model.pickle'), 'rb'))
 

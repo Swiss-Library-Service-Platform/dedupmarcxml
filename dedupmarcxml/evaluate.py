@@ -491,6 +491,8 @@ def get_similarity_score(sim_analysis: Dict[str, float],
         return scorelib.methods.random_forest_music(sim_analysis)
     elif method == 'random_forest_book':
         return scorelib.methods.random_forest_book(sim_analysis)
+    elif method == 'random_forest_general':
+        return scorelib.methods.random_forest_general(sim_analysis)
     elif method == 'mlp_book':
         return scorelib.methods.mlp_book(sim_analysis)
     return scorelib.methods.mean(sim_analysis)

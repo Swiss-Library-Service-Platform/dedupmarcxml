@@ -918,9 +918,9 @@ class XmlBriefRecFactory(BriefRecFactory):
 
 
 class JsonBriefRecFactory(BriefRecFactory):
-    """Class to create a brief record from a MARCXML record
+    """Class to create a brief record from a json record
 
-    The class can parse several fields of the MARCXML record. It can also
+    The class can parse several fields of the json record. It can also
     summarize the result in a json object.
 
     :cvar bib_type: :class:`Dict`
@@ -948,7 +948,7 @@ class JsonBriefRecFactory(BriefRecFactory):
         elif len(path) == 2:
             datafields = bib['marc'].get(path[0], [])
 
-            code = 'N' + path[1] if path[1].isdigit() else path[1]
+            code = 'n' + path[1] if path[1].isdigit() else path[1]
 
             for datafield in datafields:
                 for subfield in datafield['sub']:
@@ -964,7 +964,7 @@ class JsonBriefRecFactory(BriefRecFactory):
 
     @classmethod
     def findall(cls, bib: bib_type, path: str) -> List[Union[str, List[Dict]]]:
-        """Find a value in the MARCXML record
+        """Find a value in the json record
 
         :param bib: Marc21 record
         :param path: path to the value to find
@@ -976,7 +976,7 @@ class JsonBriefRecFactory(BriefRecFactory):
         if len(path) == 2:
             values = []
             datafields = bib['marc'].get(path[0], [])
-            code = 'N' + path[1] if path[1].isdigit() else path[1]
+            code = 'n' + path[1] if path[1].isdigit() else path[1]
             for datafield in datafields:
                 for subfield in datafield['sub']:
                     if code in subfield:

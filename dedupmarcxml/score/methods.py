@@ -64,3 +64,17 @@ def random_forest_book(results: Dict[str, float]) -> float:
     score = tools.rf_book_model.predict_proba(pd.DataFrame(results, index=[1]))[0][1]
 
     return score
+
+def random_forest_general(results: Dict[str, float]) -> float:
+    """
+    Calculate the probability according to the model using the
+    values in the two dictionaries.
+
+    :param results: dictionary with results values
+
+    :return: calculated score of the classifier
+    """
+
+    score = tools.rf_general_model.predict_proba(pd.DataFrame(results, index=[1]))[0][1]
+
+    return score
