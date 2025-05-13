@@ -4,7 +4,7 @@ import re
 
 extent_types = {
     'reduction': ['REDUCTION', 'AUSZUG', 'RIDUZIONE'],
-    'pokect': ['TASCHE', 'POCHE', 'POCKET'],
+    'pocket': ['TASCHE', 'POCHE', 'POCKET'],
     'orchestra': ['AUFFUEHRUNG', 'ORCHESTR'],
     'part': ['PARTIE', r'\bPART\b', 'STIMME']
 }

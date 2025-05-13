@@ -21,8 +21,8 @@ class TestScorePublishers(unittest.TestCase):
         self.assertEqual(factor, 1)
 
         pub1, pub2, factor = normalize_publishers('PUF', 'Presses Universitaire de France')
-        self.assertEqual(pub1, 'PRESSES UNIVERSITAIRE DE FRANCE')
-        self.assertEqual(pub2, 'PRESSES UNIVERSITAIRE DE FRANCE')
+        self.assertEqual(pub1, 'PRESSES UNIVERSITAIRES DE FRANCE')
+        self.assertEqual(pub2, 'PRESSES UNIVERSITAIRES DE FRANCE')
         self.assertLess(factor, 1)
         self.assertGreater(factor, 0.9)
 

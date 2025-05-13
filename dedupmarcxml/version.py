@@ -1,2 +1,2 @@
-__version__ = '0.3.0'
-commit_message = f'Backup'
+__version__ = '1.0.0'
+commit_message = f'release'
