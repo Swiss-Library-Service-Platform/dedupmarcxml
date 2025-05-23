@@ -403,14 +403,33 @@ def evaluate_identifiers(ids1: List[str], ids2: List[str]) -> float:
 
 
 
-def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec) -> Dict[str, float]:
+def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec, prevent_auto_match=False) -> Dict[str, float]:
     """Evaluate similarity between two records
 
     :param rec1: BriefRecord object
     :param rec2: BriefRecord object
+    :param prevent_auto_match: if True, we check record id of both records,
+        if they are the same, we return 0 to all parameters to avoid auto match
 
     :return: float with matching score
     """
+
+    if prevent_auto_match is True and rec1.data['rec_id'] == rec2.data['rec_id']:
+        return {'format': 0,
+                'titles': 0,
+                'short_titles': 0,
+                'creators': 0,
+                'corp_creators': 0,
+                'languages': 0,
+                'publishers': 0,
+                'editions': 0,
+                'extent': 0,
+                'years': 0,
+                'series': 0,
+                'parent': 0,
+                'std_nums': 0,
+                'sys_nums': 0}
+
     # We need to know the record type to calculate the similarity of extent
     if rec1.data['format']['type'] == rec2.data['format']['type']:
         rec_type = rec1.data['format']['type']
