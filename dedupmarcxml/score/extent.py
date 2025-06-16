@@ -3,6 +3,7 @@ from dedupmarcxml import tools
 import re
 
 extent_types = {
+    'partition': ['PARTITION', 'PARTITURE', 'PARTITUR'],
     'reduction': ['REDUCTION', 'AUSZUG', 'RIDUZIONE'],
     'pocket': ['TASCHE', 'POCHE', 'POCKET'],
     'orchestra': ['AUFFUEHRUNG', 'ORCHESTR'],
@@ -84,7 +85,8 @@ def calc_notated_music_score(extent1, extent2, score):
             bonus += 1
 
     # Apply penalty
-    score = score * 0.75 ** (penalty ** 2)
+    if penalty > 0:
+        score = 0.2
 
     # No bonus if penalty is applied
     if bonus > 0 and penalty == 0:

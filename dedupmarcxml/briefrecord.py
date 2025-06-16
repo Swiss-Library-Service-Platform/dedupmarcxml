@@ -580,7 +580,7 @@ class BriefRecFactory(ABC):
             if len(f348s) > 0:
                 extent['txt'] = extent['txt'] + ', ' + ', '.join(f348s)
 
-            return cls.normalize_extent(extent_field)
+            return extent
 
         return None
 
