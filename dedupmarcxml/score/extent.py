@@ -5,7 +5,7 @@ import re
 extent_types = {
     'partition': ['PARTITION', 'PARTITURE', 'PARTITUR'],
     'reduction': ['REDUCTION', 'AUSZUG', 'RIDUZIONE'],
-    'pocket': ['TASCHE', 'POCHE', 'POCKET'],
+    'pocket': ['TASCHE', 'POCHE', 'POCKET', 'KLEIN', 'PETIT'],
     'orchestra': ['AUFFUEHRUNG', 'ORCHESTR'],
     'part': ['PARTIE', r'\bPART\b', 'STIMME']
 }
@@ -55,7 +55,7 @@ def calc_notated_music_score(extent1, extent2, score):
     """Calculate score for notated music extent comparison
 
     We use a dictionary with extent types and their values to compare the two extents.
-    A penalty is applied when a category word is available in only one record.
+    If a match is missing, a penalty is applied: score => 0.2.
     A bonus is applied when in the two records a word of the category is available.
     No bonus is applied when a penalty is applied.
 
@@ -78,11 +78,12 @@ def calc_notated_music_score(extent1, extent2, score):
     bonus = 0
 
     # Calculate penalty and bonus
-    for t in result.values():
-        if t['rec1'] != t['rec2']:
-            penalty += 1
-        elif t['rec1'] is True and t['rec2'] is True:
-            bonus += 1
+    if any(t['rec1'] for t in result.values()) and any(t['rec2'] for t in result.values()):
+        for t in result.values():
+            if t['rec1'] != t['rec2']:
+                penalty += 1
+            elif t['rec1'] is True and t['rec2'] is True:
+                bonus += 1
 
     # Apply penalty
     if penalty > 0:

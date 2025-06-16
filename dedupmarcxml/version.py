@@ -1,2 +1,2 @@
-__version__ = '1.0.3'
-commit_message = f'Update music score model'
+__version__ = '1.0.4'
+commit_message = f'small fix on 348 field evaluation'
