@@ -5,7 +5,7 @@ import re
 extent_types = {
     'partition': ['PARTITION', 'PARTITURE', 'PARTITUR'],
     'reduction': ['REDUCTION', 'AUSZUG', 'RIDUZIONE'],
-    'pocket': ['TASCHE', 'POCHE', 'POCKET', 'KLEIN', 'PETIT'],
+    'pocket': ['TASCHE', 'POCHE', 'POCKET', 'KLEIN', 'PETIT', 'ETUDE', 'STUDIEN'],
     'orchestra': ['AUFFUEHRUNG', 'ORCHESTR'],
     'part': ['PARTIE', r'\bPART\b', 'STIMME']
 }
@@ -87,7 +87,7 @@ def calc_notated_music_score(extent1, extent2, score):
 
     # Apply penalty
     if penalty > 0:
-        score = 0.2
+        score = 0
 
     # No bonus if penalty is applied
     if bonus > 0 and penalty == 0:

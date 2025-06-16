@@ -1,5 +1,20 @@
 import unittest
 from dedupmarcxml.score.extent import get_rounded_extent, calc_with_sets, calc_with_sum, calc_notated_music_score
+from dedupmarcxml.evaluate import evaluate_extent
+
+class TestEvaluateExtent(unittest.TestCase):
+    def test_evaluate_extent(self):
+        self.assertEqual(evaluate_extent({'nb': [24, 1, 1],
+                                          'txt': '1 partition (24 pages), 1 matériel d\'orchestre'},
+                                         {'nb': [24, 1],
+                                          'txt': '1 partition (24 pages)'}, 'Notated Music'),
+                                         0.2)
+        self.assertGreater(evaluate_extent({'nb': [24, 1, 1],
+                                          'txt': '1 partition (24 pages), 1 matériel d\'orchestre'},
+                                         {'nb': [1, 1],
+                                          'txt': '1 Partitur,  Aufführungsmaterial'}, 'Notated Music'),
+                                         0.7)
+
 
 class TestScoreExtent(unittest.TestCase):
 
@@ -25,7 +40,7 @@ class TestScoreExtent(unittest.TestCase):
     def test_calc_notated_music_score(self):
         self.assertEqual(calc_notated_music_score('212, 42, 1 / 1 partition (XLII, 212 pages)',
                                                  '212, 42, 1 / 1 Taschenpartitur (XLII, 212 S.)', 1),
-                        0.2)
+                        0)
         self.assertGreater(calc_notated_music_score('212, 42, 1 / 1 partition (XLII, 212 pages)',
                                                  '212, 42, 1 / 1 Tschenpartitur (XLII, 212 S.)', 1),
                         0.8)
@@ -38,7 +53,7 @@ class TestScoreExtent(unittest.TestCase):
 
         self.assertEqual(calc_notated_music_score('1 partition(15 pages), 1 réduction',
                                                     '15 S. Klavierauszug', 0.8),
-                           0.2)
+                           0)
 
 
 if __name__ == '__main__':

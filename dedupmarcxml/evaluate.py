@@ -225,7 +225,7 @@ def evaluate_extent(extent1_dict: Dict, extent2_dict: Dict, rec_type: Optional[s
     else:
         score = (score1 + score2 + score3) / 3
 
-    if rec_type == 'Notated music':
+    if rec_type == 'Notated Music':
         score = scorelib.extent.calc_notated_music_score(extent1_dict['txt'], extent2_dict['txt'], score)
 
     return score

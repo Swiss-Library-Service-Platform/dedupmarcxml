@@ -1,2 +1,2 @@
-__version__ = '1.0.4'
-commit_message = f'small fix on 348 field evaluation'
+__version__ = '1.1.0'
+commit_message = f'Fix on 348 field evaluation'
