@@ -55,6 +55,9 @@ class TestScoreExtent(unittest.TestCase):
                                                     '15 S. Klavierauszug', 0.8),
                            0)
 
+        self.assertGreater(calc_notated_music_score('212, 42, 1 / 0 partition (XLII, 212 pages)',
+                                                 '212, 42, 1 / 1 Tschenpartitur (XLII, 212 S.)', 1),
+                        0.6)
 
 if __name__ == '__main__':
     unittest.main()

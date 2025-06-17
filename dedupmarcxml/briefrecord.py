@@ -183,7 +183,7 @@ class BriefRecFactory(ABC):
         :return: a dictionary with keys 'nb' and 'txt'
         """
         extent_lower = extent.lower()
-        extent_list = [int(f) for f in re.findall(r'\d+', extent_lower)]
+        extent_list = [int(f) for f in re.findall(r'\d+', extent_lower) if f != '0']
         extent_list += [tools.roman_to_int(f) for f in re.findall(r'\b[ivxlcdm]+\b', extent_lower)
                         if tools.roman_to_int(f) is not None and f not in ['d', 'cm']]
 
