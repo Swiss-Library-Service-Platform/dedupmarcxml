@@ -2,6 +2,10 @@
 dedupmarcxml documentation |doc|
 ********************************
 
+.. toctree::
+
+   briefrecord
+
 .. |doc| image:: https://readthedocs.org/projects/dedupmarcxml/badge/?version=latest
     :target: https://dedupmarcxml.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status

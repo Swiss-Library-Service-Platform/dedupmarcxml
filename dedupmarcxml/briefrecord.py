@@ -563,7 +563,7 @@ class BriefRecFactory(ABC):
     @classmethod
     def get_extent(cls, bib: bib_type) -> Optional[str]:
         """get_extent(bib: etree.Element)
-        Return extent from field 300$a
+        Return extent from field 300$a and 300$e and 348$a
 
         :param bib: :class:`etree.Element`
         :return: list of extent or None if not found
