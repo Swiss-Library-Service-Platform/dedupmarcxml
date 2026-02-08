@@ -307,13 +307,14 @@ def evaluate_parent(parent1: Dict, parent2: Dict) -> float:
 
         # Create parts field if not present => used to compare two records with parts fields
         if 'parts' not in p:
-            parts = []
+            txts = []
             if 'number' in p:
-                parts += BriefRecFactory.normalize_extent(p['number'])
+                txts.append(p['number'])
             if 'year' in p:
-                parts.append(p['year'])
-            if len(parts) > 0:
-                p['parts'] = parts
+                txts.append(str(p['year']))
+            if len(txts) > 0:
+                txt = ' '.join(txts)
+                p['parts'] = BriefRecFactory.normalize_extent(txt)
 
     parent1 = deepcopy(parent1)
     parent2 = deepcopy(parent2)

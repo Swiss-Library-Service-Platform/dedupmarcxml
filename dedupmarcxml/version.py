@@ -1,2 +1,2 @@
-__version__ = '1.1.6'
-commit_message = f'Fix div 0 related to extent score'
+__version__ = '1.1.7'
+commit_message = f'fix bug in parents evaluation'
