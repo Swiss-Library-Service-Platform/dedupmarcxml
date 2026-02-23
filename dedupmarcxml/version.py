@@ -1,2 +1,2 @@
-__version__ = '1.1.7'
-commit_message = f'fix bug in parents evaluation'
+__version__ = '1.1.8'
+commit_message = f'Improve books model'
