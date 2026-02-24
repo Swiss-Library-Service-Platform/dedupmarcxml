@@ -297,8 +297,8 @@ def evaluate_parent(parent1: Dict, parent2: Dict) -> float:
         score_identifiers = evaluate_identifiers([parent1['isbn']], [parent2['isbn']])
 
     if 'number' in parent1 and 'number' in parent2:
-        score_no = int(BriefRecFactory.normalize_extent(parent1['number']) ==
-                       BriefRecFactory.normalize_extent(parent2['number']))
+        score_no = int(BriefRecFactory.normalize_extent(parent1['number'])['nb'] ==
+                       BriefRecFactory.normalize_extent(parent2['number'])['nb'])
 
     if 'year' in parent1 and 'year' in parent2:
         score_year = int(parent1['year'] == parent2['year'])
@@ -316,35 +316,68 @@ def evaluate_parent(parent1: Dict, parent2: Dict) -> float:
                 txt = ' '.join(txts)
                 p['parts'] = BriefRecFactory.normalize_extent(txt)
 
+    # Idea is to check if number is part of one of the $$g even without the "no:" part.
+    # If it is the case, we consider that the number is the same and we give a score of 1.
+    # If there are parts in one of the two records and not in the other, we give a score of 0.
+    if score_no is None and 'number' in parent1:
+        nos = BriefRecFactory.normalize_extent(parent1['number'])['nb']
+        for no in nos:
+            if 'parts' in parent2 and 'nb' in parent2['parts'] and no in parent2['parts']['nb']:
+                score_no = 1
+                break
+        if score_no is None and parent2['parts']['nb'] > 1:
+            score_no = 0
+
+    if score_no is None and 'number' in parent2:
+        nos = BriefRecFactory.normalize_extent(parent2['number'])['nb']
+        for no in nos:
+            if 'parts' in parent1 and 'nb' in parent1['parts'] and no in parent1['parts']['nb']:
+                score_no = 1
+                break
+
+        # We consider that if only one number is present in the parts field,
+        # it is not enough to penalize the record if the number is not present in the other record
+        # because it can be incomplete information about the parts of the record.
+        # If there are more than one number in the parts field, we consider that it is enough
+        # to penalize the record if the number is not present in the other record because it means that
+        # the record has more than one part and the number is not present in the other record.
+        if score_no is None and parent1['parts']['nb'] > 1:
+            score_no = 0
+
     parent1 = deepcopy(parent1)
     parent2 = deepcopy(parent2)
     if 'parts' in parent1 and 'parts' in parent2 and 'nb' in parent1['parts'] and 'nb' in parent2['parts']:
-        initial_nb = sum([len(parent1['parts']['nb']), len(parent2['parts']['nb'])])
-        to_delete = []
-        for e in parent1['parts']['nb']:
-            if e in parent2['parts']['nb']:
-                to_delete.append(e)
-                parent2['parts']['nb'].remove(e)
-        for e in to_delete:
-            parent1['parts']['nb'].remove(e)
-
-        to_delete = []
-        for e in parent2['parts']['nb']:
-            if e in parent1['parts']['nb']:
-                to_delete.append(e)
+        initial_nb = min([len(parent1['parts']['nb']), len(parent2['parts']['nb'])])
+        if initial_nb > 0:
+            to_delete = []
+            for e in parent1['parts']['nb']:
+                if e in parent2['parts']['nb']:
+                    to_delete.append(e)
+                    parent2['parts']['nb'].remove(e)
+            for e in to_delete:
                 parent1['parts']['nb'].remove(e)
-        for e in to_delete:
-            parent2['parts']['nb'].remove(e)
 
-        final_nb = sum([len(parent1['parts']['nb']), len(parent2['parts']['nb'])])
-        score_parts = 1 - final_nb / initial_nb
+            to_delete = []
+            for e in parent2['parts']['nb']:
+                if e in parent1['parts']['nb']:
+                    to_delete.append(e)
+                    parent1['parts']['nb'].remove(e)
+            for e in to_delete:
+                parent2['parts']['nb'].remove(e)
+
+            final_nb = min([len(parent1['parts']['nb']), len(parent2['parts']['nb'])])
+            score_parts = 1 - final_nb / initial_nb
+            if initial_nb > 1 and initial_nb - final_nb < 2:
+                score_parts /= 3
+
+        else:
+            score_parts = 0
 
     elif 'parts' in parent1 or 'parts' in parent2:
         # Case if part information is only in one record available
         score_parts = 0
 
-    return score_title * np.mean([s for s in [score_title, score_no, score_year, score_identifiers, score_parts]
-                                  if s is not None])
+    return np.prod([s for s in [score_title, score_no, score_year, score_identifiers, score_parts] if s is not None])
 
 
 @tools.handle_missing_values()

@@ -202,7 +202,7 @@ def evaluate_text_similarity(txt1: str, txt2: str, strict: Optional[bool] = Fals
         t_list1, t_list2 = (t_list2, t_list1)
     if strict is False:
         diff = len(t_list1) - len(t_list2)
-        coef = 1 / diff ** 0.05 - 0.15 if diff > 0 else 1
+        coef = 1 / diff ** 0.02 - 0.05 if diff > 0 else 1
     else:
         if len(t_list1) == 0 or len(t_list2) == 0:
             coef = 0

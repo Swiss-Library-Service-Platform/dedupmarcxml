@@ -142,7 +142,7 @@ class TestScore(unittest.TestCase):
         self.assertTrue(score4 > 0.8)
 
 
-    def test_evaluate_parent(self):
+    def test_evaluate_parent_1(self):
         parent1 = {"year": 2013,
                    "parts": {
                        "nb": [
@@ -170,6 +170,93 @@ class TestScore(unittest.TestCase):
         score1 = evaluate_parent(parent1, parent2)
         self.assertTrue(score1 > 0.7, f'{score1} > 0.7')
 
+
+    def test_evaluate_parent_2(self):
+        parent1 = {"year": 1987,
+                   "parts": {
+                       "nb": [
+                           1987,
+                           177
+                       ],
+                       "txt": "1987/177"
+                   },
+                   "title": "ZAK : Zeitschrift für die Ausgleichskassen der AHV und ihre Zweigstellen, die IV-Kommissionen und IV-Regionalstellen, die Durchführungsstellen der Ergänzungsleistungen zur AHV und IV, der Erwerbsersatzordnung für Wehr- und Zivilschutzpflichtige sowie der Familienzulagen"
+                   }
+
+        parent2 = {"year": 1987,
+                   "parts": {
+                       "nb": [
+                           1987,
+                           181,
+                           178,
+                           4
+                       ],
+                       "txt": "1987, H. 4, S. 177-181"
+                   },
+                   "title": "ZAK"
+                   }
+
+        score1 = evaluate_parent(parent1, parent2)
+
+        self.assertTrue(score1 < 0.5, f'{score1} < 0.5')
+
+    def test_evaluate_parent_3(self):
+        parent1 = {"year": 1987,
+                   "parts": {
+                       "nb": [
+                           1987,
+                           177
+                       ],
+                       "txt": "1987/177"
+                   },
+                   "title": "ZAK : Zeitschrift für die Ausgleichskassen der AHV und ihre Zweigstellen, die IV-Kommissionen und IV-Regionalstellen, die Durchführungsstellen der Ergänzungsleistungen zur AHV und IV, der Erwerbsersatzordnung für Wehr- und Zivilschutzpflichtige sowie der Familienzulagen"
+                   }
+
+        parent2 = {"year": 1987,
+                   "parts": {
+                       "nb": [
+                           1987,
+                           181,
+                           177,
+                           4
+                       ],
+                       "txt": "1987, H. 4, S. 177-181"
+                   },
+                   "title": "ZAI"
+                   }
+
+        score1 = evaluate_parent(parent1, parent2)
+
+        self.assertTrue(score1 < 0.7, f'{score1} < 0.7')
+
+    def test_evaluate_parent_4(self):
+        parent1 = {"year": 1987,
+                   "parts": {
+                       "nb": [
+                           1987,
+                           177
+                       ],
+                       "txt": "1987/177"
+                   },
+                   "title": "ZAK : Zeitschrift für die Ausgleichskassen der AHV und ihre Zweigstellen, die IV-Kommissionen und IV-Regionalstellen, die Durchführungsstellen der Ergänzungsleistungen zur AHV und IV, der Erwerbsersatzordnung für Wehr- und Zivilschutzpflichtige sowie der Familienzulagen"
+                   }
+
+        parent2 = {"year": 1987,
+                   "parts": {
+                       "nb": [
+                           1987,
+                           181,
+                           177,
+                           4
+                       ],
+                       "txt": "1987, H. 4, S. 177-181"
+                   },
+                   "title": "ZAK"
+                   }
+
+        score1 = evaluate_parent(parent1, parent2)
+
+        self.assertTrue(score1 > 0.85, f'{score1} > 0.85')
 
     def test_evaluate_std_identifiers_1(self):
         self.assertTrue(evaluate_std_nums(['123'], ['123']) > 0.9,

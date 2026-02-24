@@ -720,7 +720,7 @@ class BriefRecFactory(ABC):
 
                 # Get number information. In Alma this information is prefixed with "nr:<number>"
                 if txt.startswith('no:'):
-                    parent_information['number'] = txt[3:]
+                    parent_information['number'] = txt[3:].strip()
 
                 # No normalized parts in Alma format. Try to extract the longest list of numbers
                 if not txt.startswith('yr:') and not txt.startswith('no:'):
