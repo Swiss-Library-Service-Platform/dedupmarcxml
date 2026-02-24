@@ -325,7 +325,7 @@ def evaluate_parent(parent1: Dict, parent2: Dict) -> float:
             if 'parts' in parent2 and 'nb' in parent2['parts'] and no in parent2['parts']['nb']:
                 score_no = 1
                 break
-        if score_no is None and parent2['parts']['nb'] > 1:
+        if score_no is None and 'parts' in parent2 and len(parent2['parts']['nb']) > 1:
             score_no = 0
 
     if score_no is None and 'number' in parent2:
@@ -341,7 +341,7 @@ def evaluate_parent(parent1: Dict, parent2: Dict) -> float:
         # If there are more than one number in the parts field, we consider that it is enough
         # to penalize the record if the number is not present in the other record because it means that
         # the record has more than one part and the number is not present in the other record.
-        if score_no is None and parent1['parts']['nb'] > 1:
+        if score_no is None and 'parts' in parent1 and len(parent1['parts']['nb']) > 1:
             score_no = 0
 
     parent1 = deepcopy(parent1)
