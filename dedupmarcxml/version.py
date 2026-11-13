@@ -1,2 +1,2 @@
-__version__ = '1.2.6'
-commit_message = f'Fix error when 008 field is missing in the record.'
+__version__ = '1.2.7'
+commit_message = f'Fix license declaration.'
