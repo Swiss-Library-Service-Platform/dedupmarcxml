@@ -622,8 +622,10 @@ class BriefRecFactory(ABC):
         :return: language or None if not found
         """
         controlfield008 = cls.find(bib, '008')
-
-        languages = [controlfield008[35:38]]
+        if controlfield008 is not None:
+            languages = [controlfield008[35:38]]
+        else:
+            languages = []
 
         for field041 in cls.findall(bib, '041$$a'):
             if field041 not in languages:
