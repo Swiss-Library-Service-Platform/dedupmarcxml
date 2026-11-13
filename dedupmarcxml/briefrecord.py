@@ -793,7 +793,7 @@ class BriefRecFactory(ABC):
 
         :param bib: :class:`etree.Element`
 
-        :return: boolean indicating whether the record is a micro form
+        :return: boolean indicating whether the record is a Braille document
         """
         leader6 = cls.get_leader_pos67(bib)[0]
         f008 = cls.find(bib,'008')
@@ -802,7 +802,8 @@ class BriefRecFactory(ABC):
 
         if f336b is not None and f336b == 'tct':
             return True
-
+        if f008 is None:
+            return False
         if len(f008) > format_pos:
             return f008[format_pos] in 'f'
         return False
