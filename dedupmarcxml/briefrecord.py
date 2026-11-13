@@ -751,6 +751,10 @@ class BriefRecFactory(ABC):
 
         leader6 = cls.get_leader_pos67(bib)[0]
         f008 = cls.find(bib,'008')
+
+        if f008 is None:
+            return False
+
         format_pos = 29 if leader6 in 'egkor' else 23
 
         if len(f008) > format_pos:

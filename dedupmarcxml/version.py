@@ -1,2 +1,2 @@
-__version__ = '1.2.2'
-commit_message = f'install new models with new parents evaluation method'
+__version__ = '1.2.3'
+commit_message = f'Fix error when 008 field is missing in the record.'
