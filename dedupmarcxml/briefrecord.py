@@ -774,6 +774,8 @@ class BriefRecFactory(ABC):
         """
         leader6 = cls.get_leader_pos67(bib)[0]
         f008 = cls.find(bib,'008')
+        if f008 is None:
+            return False
         format_pos = 29 if leader6 in 'egkor' else 23
         f338b = cls.find(bib,'338$$b')
         if f338b is not None and f338b.startswith('h') is True:
