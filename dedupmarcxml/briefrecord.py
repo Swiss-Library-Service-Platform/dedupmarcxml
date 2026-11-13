@@ -987,9 +987,10 @@ class JsonBriefRecFactory(BriefRecFactory):
             datafields = bib['marc'].get(path[0], [])
             code = 'n' + path[1] if path[1].isdigit() else path[1]
             for datafield in datafields:
-                for subfield in datafield['sub']:
-                    if code in subfield:
-                        values.append(subfield[code])
+                if isinstance(datafield, dict):
+                    for subfield in datafield['sub']:
+                        if code in subfield:
+                            values.append(subfield[code])
             return values
 
         elif len(path) == 1:
