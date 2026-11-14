@@ -665,6 +665,8 @@ class BriefRecFactory(ABC):
         editions_complete = []
 
         for edition in editions:
+            if edition is None:
+                continue
             # Normalize edition statement
             norm_edition = tools.to_ascii(edition)
             norm_edition = tools.remove_special_chars(norm_edition, keep_dot=True)
