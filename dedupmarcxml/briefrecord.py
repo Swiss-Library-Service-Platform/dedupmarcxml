@@ -447,7 +447,8 @@ class BriefRecFactory(ABC):
             if pos7 in 'acdm':
                 return 'Book'
             elif pos7 in 'bis':
-                if cls.find(bib, '008')[21] in 'pn':
+                f008 = cls.find(bib, '008')
+                if f008 is not None and f008[21] in 'pn':
                     return 'Journal'
                 else:
                     return 'Series'

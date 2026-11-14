@@ -1,2 +1,2 @@
-__version__ = '1.2.11'
-commit_message = f'Improve year extraction regex to handle copyright symbols and whitespace'
+__version__ = '1.2.12'
+commit_message = f'Fix distinction between books and journals in briefrecord.get_format()'
