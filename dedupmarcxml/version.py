@@ -1,2 +1,2 @@
-__version__ = '1.2.10'
-commit_message = f'Fix bug in edition normalization and add checks for missing fields in briefrecord.py.'
+__version__ = '1.2.11'
+commit_message = f'Improve year extraction regex to handle copyright symbols and whitespace'

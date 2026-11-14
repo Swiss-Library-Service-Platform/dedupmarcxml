@@ -238,9 +238,9 @@ class BriefRecFactory(ABC):
 
         :return: int value with the found year or None if no year available
         """
-        m = re.search(r'\b\d{4}\b', txt)
+        m = re.search(r'\b(?:c|©)?\s*(\d{4})\b', txt)
         if m is not None:
-            return int(m.group())
+            return int(m.group(1))
 
     @classmethod
     def get_rec_id(cls, bib: bib_type) -> Optional[str]:
