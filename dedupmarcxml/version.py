@@ -1,2 +1,2 @@
-__version__ = '1.2.12'
-commit_message = f'Fix distinction between books and journals in briefrecord.get_format()'
+__version__ = '1.2.13'
+commit_message = f'update methode list to include random_forest_general'
