@@ -241,7 +241,7 @@ def evaluate_years(year1: int, year2: int) -> float:
 
     :return: float with matching score
     """
-    return 1 / ((abs(year1 - year2) * .5) ** 2 + 1)
+    return 1 / ((abs(year1 - year2) * .5) ** 3.5 + 1)
 
 
 @tools.handle_missing_values(key='y1')
@@ -529,7 +529,7 @@ def evaluate_records_similarity(rec1: BriefRec, rec2: BriefRec, prevent_auto_mat
 
 
 def get_similarity_score(sim_analysis: Dict[str, float],
-                         method: Optional[str] = 'mean') -> float:
+                         method: Optional[str] = 'mean', secure_mode: Optional[bool] = False) -> float:
     """Return the similarity score between two records
 
     It uses the result of the evaluation of similarity of two records
@@ -537,18 +537,32 @@ def get_similarity_score(sim_analysis: Dict[str, float],
 
     :param sim_analysis: dictionary containing the results of the evaluation of similarity of two records
     :param method: method to use to calculate the similarity score, default method is the mean
+    :param secure_mode: whether to use secure mode, default is False
 
     :return: similarity score between two records as float
     """
     if method == 'random_forest_music':
-        return scorelib.methods.random_forest_music(sim_analysis)
+        score = scorelib.methods.random_forest_music(sim_analysis)
     elif method == 'random_forest_book':
-        return scorelib.methods.random_forest_book(sim_analysis)
+        score = scorelib.methods.random_forest_book(sim_analysis)
     elif method == 'random_forest_general':
-        return scorelib.methods.random_forest_general(sim_analysis)
+        score = scorelib.methods.random_forest_general(sim_analysis)
     elif method == 'mlp_book':
-        return scorelib.methods.mlp_book(sim_analysis)
-    return scorelib.methods.mean(sim_analysis)
+        score = scorelib.methods.mlp_book(sim_analysis)
+    else:
+        score = scorelib.methods.mean(sim_analysis)
+
+    if secure_mode:
+        if 0.2 <= sim_analysis['years'] <= 0.4:
+            score -= 0.3
+
+        if sim_analysis['std_nums'] == 0.2:
+            score -= 0.3
+
+        if score < 0:
+            score = 0
+
+    return score
 
 
 if __name__ == "__main__":

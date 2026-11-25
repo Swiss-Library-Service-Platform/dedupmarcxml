@@ -59,6 +59,7 @@ class TestScore(unittest.TestCase):
         self.assertGreater(evaluate_years(2000, 2000), 0.9)
         self.assertGreater(evaluate_years(2000, 2001), 0.8)
         self.assertGreater(evaluate_years(2000, 2002), 0.6)
+        self.assertLess(evaluate_years(2000, 2003), 0.4)
         self.assertLess(evaluate_years(2000, 2005), 0.4)
         self.assertLess(evaluate_years(2000, 2006), 0.3)
         self.assertLess(evaluate_years(2000, 2007), 0.3)
@@ -71,10 +72,10 @@ class TestScore(unittest.TestCase):
         self.assertTrue(0.8 < score2 < 0.95, f'0.8 < {score2} < 0.95')
 
         score3 = evaluate_years_start_and_end({'y1': [2000, 2001], 'y2': 2011}, {'y1': [2000, 2001], 'y2': 2010})
-        self.assertTrue(0.9 < score3 < 0.98, f'0.9 < {score3} < 0.98')
+        self.assertTrue(0.9 < score3 < 0.99, f'0.9 < {score3} < 0.99')
 
         score4 = evaluate_years_start_and_end({'y1': [2001]}, {'y1': [2000]})
-        self.assertTrue(0.7 < score4 < 0.9, f'0.7 < {score4} < 0.9')
+        self.assertTrue(0.7 < score4 < 0.95, f'0.7 < {score4} < 0.95')
 
     def test_evaluate_languages(self):
         self.assertTrue(evaluate_languages(['eng'], ['eng']) > 0.9)
@@ -381,6 +382,23 @@ class TestScore(unittest.TestCase):
         score = get_similarity_score(sim_score, method='random_forest_general')
         self.assertTrue(score < 0.4, f'{score} < 0.4')
 
+    def test_secure_mode_1(self):
+        sim_score = {'corp_creators': 0.0, 'creators': 1.0, 'editions': 0.0, 'extent': 1.0, 'format': 1.0, 'languages': 1.0, 'parent': 0.0, 'publishers': 1.0, 'series': 1.0, 'short_titles': 1.0, 'std_nums': 1.0, 'sys_nums': 1.0, 'titles': 1.0, 'years': 0.4}
+        score = get_similarity_score(sim_score, method='random_forest_general')
+        score_sec = get_similarity_score(sim_score, method='random_forest_general', secure_mode=True)
+        self.assertGreater(score, score_sec)
+
+    def test_secure_mode_2(self):
+        sim_score = {'corp_creators': 0.0, 'creators': 1.0, 'editions': 0.0, 'extent': 1.0, 'format': 1.0, 'languages': 1.0, 'parent': 0.0, 'publishers': 1.0, 'series': 1.0, 'short_titles': 1.0, 'std_nums': 1.0, 'sys_nums': 1.0, 'titles': 1.0, 'years': 0.6}
+        score = get_similarity_score(sim_score, method='random_forest_general')
+        score_sec = get_similarity_score(sim_score, method='random_forest_general', secure_mode=True)
+        self.assertEqual(score, score_sec)
+
+    def test_secure_mode_3(self):
+        sim_score = {'corp_creators': 0.0, 'creators': 1.0, 'editions': 0.0, 'extent': 1.0, 'format': 1.0, 'languages': 1.0, 'parent': 0.0, 'publishers': 1.0, 'series': 1.0, 'short_titles': 1.0, 'std_nums': 0.2, 'sys_nums': 1.0, 'titles': 1.0, 'years': 0.6}
+        score = get_similarity_score(sim_score, method='random_forest_general')
+        score_sec = get_similarity_score(sim_score, method='random_forest_general', secure_mode=True)
+        self.assertGreater(score, score_sec)
 
 if __name__ == '__main__':
     unittest.main()

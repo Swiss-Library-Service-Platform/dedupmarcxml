@@ -32,7 +32,7 @@ class TestSruClient(unittest.TestCase):
         rec = SruRecord(mms_id)
         rec = XmlBriefRec(rec.data)
 
-        self.assertEqual(rec.data['extent']['nb'], [86, 1])
+        self.assertEqual(rec.data['extent']['nb'], [86])
         self.assertEqual(rec.data['format']['type'], 'Notated Music')
         self.assertEqual(rec.data['years']['y1'][0], 1926)
         self.assertTrue('H 29,265' in rec.data['std_nums'])
@@ -54,7 +54,7 @@ class TestSruClient(unittest.TestCase):
 
         self.assertEqual(rec.data['format']['type'], 'Video')
         self.assertEqual(rec.data['format']['access'], 'Online')
-        self.assertEqual(rec.data['extent']['nb'], [51, 1])
+        self.assertEqual(rec.data['extent']['nb'], [51])
         self.assertEqual(rec.data['languages'], ['eng'])
 
     def test_create_brief_record_6(self):

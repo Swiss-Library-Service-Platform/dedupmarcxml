@@ -1,4 +1,7 @@
 import unittest
+from dedupmarcxml.briefrecord import BriefRecFactory
+from dedupmarcxml.evaluate import evaluate_publishers
+
 
 from dedupmarcxml.score.publishers import *
 
@@ -54,6 +57,13 @@ class TestScorePublishers(unittest.TestCase):
         self.assertEqual(pub2, 'SPRINGER NATURE')
         self.assertLess(factor, 1)
         self.assertGreater(factor, 0.9)
+
+    def test_no_publisher(self):
+        result = BriefRecFactory.is_no_publisher('SPRINGER')
+        self.assertFalse(result)
+        result = BriefRecFactory.is_no_publisher('[s.n.]')
+        self.assertTrue(result)
+
 
 if __name__ == '__main__':
     unittest.main()

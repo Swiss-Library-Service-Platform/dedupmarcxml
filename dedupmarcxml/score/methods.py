@@ -78,8 +78,17 @@ def random_forest_general(results: Dict[str, float]) -> float:
 
     :return: calculated score of the classifier
     """
+    columns = [
+        'format', 'titles', 'short_titles', 'creators', 'corp_creators',
+        'languages', 'publishers', 'editions', 'extent', 'years',
+        'series', 'parent', 'std_nums', 'sys_nums',
+    ]
+
+    df = pd.DataFrame([results], columns=columns)
+    score = tools.rf_general_model.predict_proba(df)[0][1]
     try:
-        score = tools.rf_general_model.predict_proba(pd.DataFrame(results, index=[1]))[0][1]
+        df = pd.DataFrame([results], columns=columns)
+        score = tools.rf_general_model.predict_proba(df)[0][1]
     except ValueError:
         score = 0.0
 

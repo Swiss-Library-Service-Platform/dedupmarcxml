@@ -3,7 +3,11 @@ from typing import List, Optional, Dict, Union
 import re
 import logging
 import json
+
+from openpyxl.descriptors import Bool
+
 from dedupmarcxml import tools
+import unicodedata
 from abc import ABC, abstractmethod
 
 
@@ -186,8 +190,46 @@ class BriefRecFactory(ABC):
         extent_list = [int(f) for f in re.findall(r'\d+', extent_lower) if f != '0']
         extent_list += [tools.roman_to_int(f) for f in re.findall(r'\b[ivxlcdm]+\b', extent_lower)
                         if tools.roman_to_int(f) is not None and f not in ['d', 'cm']]
+        # remove all 1 values
+        extent_list = [f for f in extent_list if f != 1]
 
         return {'nb': sorted(extent_list, reverse=True), 'txt': extent}
+
+    @classmethod
+    def is_no_publisher(cls, publisher: str) -> bool:
+        """Ignore publisher fields that mean no publisher or self-publishing.
+
+        :param publisher: publisher to normalize
+
+        :return: True if publisher is a non-publisher, else False
+        """
+        if re.search(r'\[\s*s\s*\.?\s*n\s*\.?\s*\]', publisher, re.IGNORECASE):
+            return True
+
+        normalized = unicodedata.normalize('NFKD', publisher.casefold())
+        normalized = ''.join(
+            char for char in normalized
+            if not unicodedata.combining(char)
+        )
+        normalized = re.sub(r'[^a-z0-9]+', ' ', normalized).strip()
+
+        self_publishing_phrases = (
+            'autoedition',
+            'auto edition',
+            'compte d auteur',
+            'chez l auteur',
+            'eigenverlag',
+            'selbstverlag',
+            'verlag des autors',
+            'verlag der autorin',
+            'self publish',
+            'published by the author',
+        )
+
+        if any(phrase in normalized for phrase in self_publishing_phrases):
+            return True
+
+        return False
 
     @classmethod
     def normalize_isbn(cls, isbn: str) -> Optional[str]:
@@ -594,7 +636,7 @@ class BriefRecFactory(ABC):
         :return: list of publishers or None if not found
         """
         publishers = cls.findall(bib, '264$$b')
-
+        publishers = [publisher for publisher in publishers if not cls.is_no_publisher(publisher)]
         return None if len(publishers) == 0 else publishers
 
     @classmethod
