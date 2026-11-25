@@ -1,2 +1,2 @@
-__version__ = '1.3.3'
-commit_message = f'Update models and scoring methods'
+__version__ = '1.3.4'
+commit_message = f'Update book models and scoring methods'
