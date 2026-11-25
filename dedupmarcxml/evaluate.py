@@ -547,8 +547,10 @@ def get_similarity_score(sim_analysis: Dict[str, float],
         score = scorelib.methods.random_forest_book(sim_analysis)
     elif method == 'random_forest_general':
         score = scorelib.methods.random_forest_general(sim_analysis)
-    elif method == 'mlp_book':
-        score = scorelib.methods.mlp_book(sim_analysis)
+    elif method == 'random_forest_general_old':
+        score = scorelib.methods.random_forest_general_old(sim_analysis)
+    elif method == 'random_forest_book_old':
+        score = scorelib.methods.random_forest_book_old(sim_analysis)
     else:
         score = scorelib.methods.mean(sim_analysis)
 
