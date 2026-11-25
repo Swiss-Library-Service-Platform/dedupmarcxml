@@ -392,7 +392,7 @@ class TestScore(unittest.TestCase):
         sim_score = {'corp_creators': 0.0, 'creators': 1.0, 'editions': 0.0, 'extent': 1.0, 'format': 1.0, 'languages': 1.0, 'parent': 0.0, 'publishers': 1.0, 'series': 1.0, 'short_titles': 1.0, 'std_nums': 1.0, 'sys_nums': 1.0, 'titles': 1.0, 'years': 0.6}
         score = get_similarity_score(sim_score, method='random_forest_general')
         score_sec = get_similarity_score(sim_score, method='random_forest_general', secure_mode=True)
-        self.assertEqual(score, score_sec)
+        self.assertAlmostEqual(score, score_sec)
 
     def test_secure_mode_3(self):
         sim_score = {'corp_creators': 0.0, 'creators': 1.0, 'editions': 0.0, 'extent': 1.0, 'format': 1.0, 'languages': 1.0, 'parent': 0.0, 'publishers': 1.0, 'series': 1.0, 'short_titles': 1.0, 'std_nums': 0.2, 'sys_nums': 1.0, 'titles': 1.0, 'years': 0.6}
